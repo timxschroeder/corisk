@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>938621063236-r3ii9tvkpmit1daml0gd18rij7v80om7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.938621063236-r3ii9tvkpmit1daml0gd18rij7v80om7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDxnqvxtjAIAeXdq6-E50zA337j7t3qCg0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>938621063236</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>de.fortysevenapp.coronatracking</string>
+	<key>PROJECT_ID</key>
+	<string>corona-tracking-hackathon</string>
+	<key>STORAGE_BUCKET</key>
+	<string>corona-tracking-hackathon.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:938621063236:ios:2d676ba5644b5976a9ac11</string>
+	<key>DATABASE_URL</key>
+	<string>https://corona-tracking-hackathon.firebaseio.com</string>
+</dict>
+</plist>

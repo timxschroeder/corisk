@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "938621063236",
+    "firebase_url": "https://corona-tracking-hackathon.firebaseio.com",
+    "project_id": "corona-tracking-hackathon",
+    "storage_bucket": "corona-tracking-hackathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938621063236:android:7199716a3587ce50a9ac11",
+        "android_client_info": {
+          "package_name": "de.fortysevenapp.corona_tracking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938621063236-ul1u1khvm9ut4q12mrgp1ba39uu9o31m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu_3uoZDBZpvTwuGZYAYMSGE05QVwouH8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938621063236-ul1u1khvm9ut4q12mrgp1ba39uu9o31m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "938621063236-r3ii9tvkpmit1daml0gd18rij7v80om7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "de.fortysevenapp.coronatracking"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
