@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:corona_tracking/model/Location.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:corona_tracking/model/Pair.dart';
 import 'package:background_fetch/background_fetch.dart';
 
 const EVENTS_KEY = "fetch_events";
@@ -167,8 +169,31 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _calculateDanger(Map<String, dynamic> message) async {
-    return;
+    try {
+      final String patientId =
+          message['patientId'] ?? message['data']['patientId'];
+    } catch (e) {
+      throw ArgumentError(e);
+    }
   }
+
+  Future<List<Location>> _findCriticalPoints(
+      List<Location> local, List<Location> compare) {
+
+    final Duration duration = Duration(seconds: 30);
+    final Function timestampsBetweenIntervall = (Location first, Location second) =>
+       first.position.timestamp.difference(second.position.timestamp) < duration;
+
+    List<Pair<Location>> pairs = [];
+    for (final localLocation in local) {
+      for (final compareLocation in compare) {
+        if (timestampsBetweenIntervall(localLocation, compareLocation)) {
+          pairs.add(Pair(localLocation, compareLocation));
+        }
+      }
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
