@@ -10,10 +10,10 @@ class Patient extends Serializable {
 
   Patient();
 
-  @override
-  toJson() {
-    return;
+  Patient.fromJson(Map<String, dynamic> json) : super() {
+    this.id = json['id'];
   }
 
-  Patient.fromJson(Map<String, dynamic> json);
+  @override
+  Map<String, dynamic> toJson() => {'id': id};
 }
