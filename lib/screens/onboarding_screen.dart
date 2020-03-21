@@ -194,9 +194,11 @@ class OnboardingSection extends StatelessWidget {
             style: kTitleStyle,
           ),
           SizedBox(height: 15.0),
-          Text(
-            subtitle,
-            style: kSubtitleStyle,
+          Expanded(
+            child: Text(
+              subtitle,
+              style: kSubtitleStyle,
+            ),
           ),
         ],
       ),
