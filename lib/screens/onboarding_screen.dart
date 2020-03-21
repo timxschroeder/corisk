@@ -108,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
-                                Text(
+                                AutoSizeText(
                                   'Weiter',
                                   style: TextStyle(
                                     color: Colors.white,
@@ -189,7 +189,7 @@ class OnboardingSection extends StatelessWidget {
             ),
           ),
           SizedBox(height: MediaQuery.of(context).size.height*0.038),
-          Text(
+          AutoSizeText(
             title,
             style: kTitleStyle,
           ),
