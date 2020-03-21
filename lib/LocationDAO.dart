@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corona_tracking/DAO.dart';
 import 'package:corona_tracking/LocalDatabase.dart';
 import 'package:corona_tracking/Serializable.dart';
+import 'package:corona_tracking/model/Location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 
@@ -9,8 +9,9 @@ class LocationDao extends DAO {
   Future<Database> get _db async => await LocalDatabase.instance.database;
 
   @override
-  Future insert(Serializable serializable) async {
-    final _locationsFolder = intMapStoreFactory.store(serializable.collectionName);
+  Future insert({@required Serializable serializable, String collectionPath}) async {
+    collectionPath ??= serializable.collectionName;
+    final _locationsFolder = intMapStoreFactory.store(collectionPath);
     await _locationsFolder.add(await _db, serializable.toJson());
     print('Location insert successful');
   }
@@ -23,32 +24,27 @@ class LocationDao extends DAO {
   }
 
   @override
-  Future<List<T>> listAll<T>(String collectionName) async {
+  Future<List<Map<String, dynamic>>> listAll(String collectionName) async {
     final _locationsFolder = intMapStoreFactory.store(collectionName);
     final recordSnapshot = await _locationsFolder.find(await _db);
-    return recordSnapshot.map((snapshot) => Serializable.fromJson(snapshot.value)).toList();
+    return recordSnapshot.map((snapshot) => snapshot.value).toList();
   }
-
-  Future<T> getElementByID<T>({
-    @required String collectionPath,
-    @required String id,
-  }) {}
 
   @override
-  Future<List<T>> listAllWithTimestampIn<T>(
-      {@required String collectionName,
-      @required Timestamp lowerBound,
-      @required Timestamp upperBound}) async {
-    final _locationsFolder = intMapStoreFactory.store(collectionName);
-    final recordSnapshot = await _locationsFolder.find(await _db);
-    return recordSnapshot
-        .map((snapshot) => Serializable.fromJson(snapshot.value))
-        .toList()
-        .where((l) => l.timestamp >= lowerBound && l.timestamp <= upperBound);
+  Future<Map<String, dynamic>> getElementByID({@required String collectionPath, @required String id}) async {
+    final List<Map<String, dynamic>> elementsOfCollection = await listAll(collectionPath);
+    return elementsOfCollection.where((l) => l['id'] == id).first;
   }
 
-  /*db.collection('restaurants')
-      .doc('arinell-pizza')
-      .collection('ratings')
-      .get()*/
+  @override
+  Future<List<Map<String, dynamic>>> listAllWithTimestampIn(
+      {@required String collectionPath, @required DateTime lowerBound, @required DateTime upperBound}) async {
+    final _locationsFolder = intMapStoreFactory.store(collectionPath);
+    final recordSnapshot = await _locationsFolder.find(await _db);
+    final jsons = recordSnapshot.map((snapshot) => snapshot.value).toList();
+    return jsons
+        .map((j) => Location.fromJson(j))
+        .where((l) => l.position.timestamp.isAfter(lowerBound) && l.position.timestamp.isBefore(upperBound))
+        .map((l) => l.toJson());
+  }
 }

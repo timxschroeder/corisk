@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:corona_tracking/Serializable.dart';
 import 'package:meta/meta.dart';
 
@@ -9,17 +8,17 @@ import 'package:meta/meta.dart';
 /// @author schroeder
 /// @date 17.12.2018
 abstract class DAO {
-  Future<void> insert(Serializable serializable);
+  Future<void> insert({@required Serializable serializable, String collectionPath});
   void delete(Serializable serializable);
-  Future<List<Map<String, dynamic>>> listAll<T>(String collectionPath);
-  Future<T> getElementByID<T>({
+  Future<List<Map<String, dynamic>>> listAll(String collectionPath);
+  Future<Map<String, dynamic>> getElementByID({
     @required String collectionPath,
     @required String id,
   });
-  Future<List<T>> listAllWithTimestampIn<T>({
-    @required String collectionName,
-    @required Timestamp lowerBound,
-    @required Timestamp upperBound,
+  Future<List<Map<String, dynamic>>> listAllWithTimestampIn({
+    @required String collectionPath,
+    @required DateTime lowerBound,
+    @required DateTime upperBound,
   });
 }
 
