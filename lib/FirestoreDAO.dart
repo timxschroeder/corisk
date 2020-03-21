@@ -38,13 +38,13 @@ class FirestoreDAOImpl extends FirestoreDAO {
   }
 
   @override
-  Future<List<T>> listAll<T>(String collectionPath) async {
+  Future<List<Map<String, dynamic>>> listAll<T>(String collectionPath) async {
     final QuerySnapshot snapshot = await getCollectionReference(collectionPath).getDocuments();
     final List<DocumentSnapshot> documentSnapshots = snapshot.documents;
-    final List<T> results = [];
+    final List<Map<String, dynamic>> results = [];
     documentSnapshots.forEach(
       (ds) => results.add(
-        Serializable.fromJson(ds.data),
+        ds.data,
       ),
     );
     return results;
@@ -57,7 +57,7 @@ class FirestoreDAOImpl extends FirestoreDAO {
       document = await getCollectionReference(collectionPath).document(id).get();
     } catch (e) {
       if (e.message.toString().contains("PERMISSION_DENIED")) {
-        throw InsufficientPermissionsError('Acces to document $id denied');
+        throw InsufficientPermissionsError('Access to document $id denied');
       }
     }
 

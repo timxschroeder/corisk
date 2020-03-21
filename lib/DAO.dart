@@ -11,7 +11,7 @@ import 'package:meta/meta.dart';
 abstract class DAO {
   Future<void> insert(Serializable serializable);
   void delete(Serializable serializable);
-  Future<List<T>> listAll<T>(String collectionPath);
+  Future<List<Map<String, dynamic>>> listAll<T>(String collectionPath);
   Future<T> getElementByID<T>({
     @required String collectionPath,
     @required String id,
