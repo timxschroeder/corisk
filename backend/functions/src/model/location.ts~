@@ -1,0 +1,8 @@
+import { autoserialize } from 'cerialize'
+import { Position } from './position'
+
+export class Location {
+    @autoserialize public id: string;
+    @autoserializeAs()
+}
+
