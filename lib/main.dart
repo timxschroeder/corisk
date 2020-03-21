@@ -30,14 +30,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Position _position;
 
   void _updateLocation() async {
-    print(await Geolocator().getCurrentPosition());
-    setState(() async{
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _position = await Geolocator().getCurrentPosition();
+    Position pos = await Geolocator().getCurrentPosition();
+    print("Location: " + pos.toJson().toString());
+    setState(() {
+      _position = pos;
     });
   }
 
