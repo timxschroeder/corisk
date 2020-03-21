@@ -108,7 +108,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 Text(
-                                  'Next',
+                                  'Weiter',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 22.0,
@@ -140,7 +140,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onTap: _onTap,
                 child: Center(
                   child: Text(
-                    'Get started',
+                    'Alles klar!',
                     style: TextStyle(
                       color: Color(0xFF5B16D0),
                       fontSize: 20.0,
@@ -155,7 +155,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 
   void _onTap() {
-    print('Get started');
     var route = new MaterialPageRoute(builder: (context) => CoronaRiskTracker());
     Navigator.of(context).pushReplacement(route);
   }
