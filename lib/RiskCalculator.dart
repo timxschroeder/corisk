@@ -13,14 +13,17 @@ class RiskCalculator {
 
 
   /// Return haversine distance in meters.
-  double distance(Position p1, Position p2){
-    final haversine = Haversine.fromDegrees(latitude1: p1.latitude, longitude1: p1.longitude, latitude2: p2.latitude, longitude2: p2.longitude);
+  double distance(Position p1, Position p2) {
+    final haversine = Haversine.fromDegrees(
+        latitude1: p1.latitude, longitude1: p1.longitude, latitude2: p2.latitude, longitude2: p2.longitude);
     return haversine.distance();
+  }
+
   List<Location> criticalPoints() {
     final List<Pair<Location>> pairs = _locationPairsInInterval();
     List<Location> critical = [];
     for (final pair in pairs) {
-      if (distance(pair.first, pair.second) < _distanceTreshold) {
+      if (distance(pair.first.position, pair.second.position) < _distanceTreshold) {
         critical.add(pair.first);
       }
     }
