@@ -5,7 +5,7 @@ import 'package:corona_tracking/model/Location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 
-class LocationDao extends DAO {
+class LocationDAO extends DAO {
   Future<Database> get _db async => await LocalDatabase.instance.database;
 
   @override
