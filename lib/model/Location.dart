@@ -21,7 +21,7 @@ class Location extends Serializable {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is Location && runtimeType == other.runtimeType && id == other.id && position == other.position;
+      other is Location && runtimeType == other.runtimeType && id == other.id && position == other.position;
 
   @override
   int get hashCode => id.hashCode ^ position.hashCode;
@@ -34,7 +34,7 @@ class Location extends Serializable {
   }
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'position': position.toJson(),
-  };
+        'id': id,
+        'position': position.toJson(),
+      };
 }

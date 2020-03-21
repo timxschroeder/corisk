@@ -17,6 +17,7 @@ abstract class DAO {
     @required String id,
   });
   Future<List<T>> listAllWithTimestampIn<T>({
+    @required String collectionName,
     @required Timestamp lowerBound,
     @required Timestamp upperBound,
   });
