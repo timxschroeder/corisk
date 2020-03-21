@@ -16,7 +16,7 @@ class RiskCalculator {
     final List<Pair<Location>> pairs = _locationPairsInInterval();
     List<Location> critical = [];
     for (final pair in pairs) {
-      if (_distance(pair.first.position, pair.second.position) <
+      if (distance(pair.first.position, pair.second.position) <
           _distanceTreshold) {
         critical.add(pair.first);
       }
@@ -25,7 +25,7 @@ class RiskCalculator {
   }
 
   /// Return haversine distance in meters.
-  double _distance(Position p1, Position p2) {
+  double distance(Position p1, Position p2) {
     final haversine = Haversine.fromDegrees(
         latitude1: p1.latitude,
         longitude1: p1.longitude,
