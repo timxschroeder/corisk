@@ -61,9 +61,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 Container(
                   alignment: Alignment.centerRight,
                   child: FlatButton(
-                    onPressed: () => print('Skip'),
+                    onPressed: _onTap,
                     child: Text(
-                      'Skip',
+                      'Überspringen',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
@@ -82,87 +82,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       });
                     },
                     children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Center(
-                              child: Image(
-                                image: AssetImage(
-                                  'assets/images/onboarding0.png',
-                                ),
-                                height: 300.0,
-                                width: 300.0,
-                              ),
-                            ),
-                            SizedBox(height: 30.0),
-                            Text(
-                              'Connect people\naround the world',
-                              style: kTitleStyle,
-                            ),
-                            SizedBox(height: 15.0),
-                            Text(
-                              'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
-                              style: kSubtitleStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Center(
-                              child: Image(
-                                image: AssetImage(
-                                  'assets/images/onboarding1.png',
-                                ),
-                                height: 300.0,
-                                width: 300.0,
-                              ),
-                            ),
-                            SizedBox(height: 30.0),
-                            Text(
-                              'Live your life smarter\nwith us!',
-                              style: kTitleStyle,
-                            ),
-                            SizedBox(height: 15.0),
-                            Text(
-                              'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
-                              style: kSubtitleStyle,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(40.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Center(
-                              child: Image(
-                                image: AssetImage(
-                                  'assets/images/onboarding2.png',
-                                ),
-                                height: 300.0,
-                                width: 300.0,
-                              ),
-                            ),
-                            SizedBox(height: 30.0),
-                            Text(
-                              'Get a new experience\nof imagination',
-                              style: kTitleStyle,
-                            ),
-                            SizedBox(height: 15.0),
-                            Text(
-                              'Lorem ipsum dolor sit amet, consect adipiscing elit, sed do eiusmod tempor incididunt ut labore et.',
-                              style: kSubtitleStyle,
-                            ),
-                          ],
-                        ),
-                      ),
+                      OnboardingSection(title: "Schütze Dich und deine Nächsten", imagePath: 'assets/images/onboarding0.png', subtitle: 'In der heutigen Zeit ist es schwer nachzuvollziehen, mit wem wir in den letzten Wochen Kontakt hattten.',),
+                      OnboardingSection(title: "Dein Handy ist bei Dir", imagePath: 'assets/images/onboarding1.png', subtitle: 'Diese App fragt deshalb periodisch deinen Standort ab. \nDeine Daten werden anonym erhoben und sind nur auf deinem Gerät verfügbar.'),
+                      OnboardingSection(title: "Du wirst gewarnt", imagePath: 'assets/images/onboarding2.png', subtitle: 'Wenn einer deiner Kontakte infiziert wurde, kannst du frühzeitig einen Arzt aufsuchen und Risikogruppen in Deinem Umfeld schützen.'),
                     ],
                   ),
                 ),
@@ -236,6 +158,50 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     print('Get started');
     var route = new MaterialPageRoute(builder: (context) => CoronaRiskTracker());
     Navigator.of(context).pushReplacement(route);
+  }
+}
+
+class OnboardingSection extends StatelessWidget {
+  final String imagePath;
+  final String title;
+  final String subtitle;
+
+  const OnboardingSection({
+    Key key,
+    @required this.imagePath,
+    @required this.title,
+    @required this.subtitle
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(40.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Center(
+            child: Image(
+              image: AssetImage(
+                imagePath,
+              ),
+              height: 300.0,
+              width: 300.0,
+            ),
+          ),
+          SizedBox(height: 30.0),
+          Text(
+            title,
+            style: kTitleStyle,
+          ),
+          SizedBox(height: 15.0),
+          Text(
+            subtitle,
+            style: kSubtitleStyle,
+          ),
+        ],
+      ),
+    );
   }
 }
 
