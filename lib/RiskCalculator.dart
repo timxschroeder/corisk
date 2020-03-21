@@ -1,4 +1,5 @@
 import 'package:corona_tracking/model/Location.dart';
+import 'package:corona_tracking/utilities/haversine.dart';
 import 'package:corona_tracking/model/Pair.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -10,11 +11,11 @@ class RiskCalculator {
 
   RiskCalculator(this.local, this.other);
 
-  int distance(Location l1, Location l2) {
-    Position p1 = l1.position;
-    Position p2 = l2.position;
-  }
 
+  /// Return haversine distance in meters.
+  double distance(Position p1, Position p2){
+    final haversine = Haversine.fromDegrees(latitude1: p1.latitude, longitude1: p1.longitude, latitude2: p2.latitude, longitude2: p2.longitude);
+    return haversine.distance();
   List<Location> criticalPoints() {
     final List<Pair<Location>> pairs = _locationPairsInInterval();
     List<Location> critical = [];
