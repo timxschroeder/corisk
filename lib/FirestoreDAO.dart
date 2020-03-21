@@ -24,12 +24,26 @@ class FirestoreDAOImpl extends FirestoreDAO {
   FirestoreDAOImpl._internal();
 
   @override
-  Future<void> insert(Serializable serializable) async {
+  Future<void> insert({@required Serializable serializable, String collectionPath}) async {
+    collectionPath ??= serializable.collectionName;
     final Map<String, dynamic> json = serializable.toJson();
-    final CollectionReference collectionReference = getCollectionReference(serializable.collectionName);
+    final CollectionReference collectionReference = getCollectionReference(collectionPath);
+
     await collectionReference.document(json['id']).setData(json).whenComplete(() {
       print("Inserted $json in $collectionReference");
     });
+  }
+
+  Future<void> insertObjectWithSubcollection(Serializable parent, List<Serializable> children) async {
+    final Map<String, dynamic> jsonParent = parent.toJson();
+
+    final String childCollectionPath =
+        parent.collectionName + "/" + jsonParent['id'] + "/" + children.first.collectionName;
+
+    await insert(serializable: parent);
+
+    Future.forEach(
+        children, (child) async => await insert(serializable: child, collectionPath: childCollectionPath));
   }
 
   @override

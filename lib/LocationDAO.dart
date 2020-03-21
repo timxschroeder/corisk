@@ -9,8 +9,9 @@ class LocationDao extends DAO {
   Future<Database> get _db async => await LocalDatabase.instance.database;
 
   @override
-  Future insert(Serializable serializable) async {
-    final _locationsFolder = intMapStoreFactory.store(serializable.collectionName);
+  Future insert({@required Serializable serializable, String collectionPath}) async {
+    collectionPath ??= serializable.collectionName;
+    final _locationsFolder = intMapStoreFactory.store(collectionPath);
     await _locationsFolder.add(await _db, serializable.toJson());
     print('Location insert successful');
   }
@@ -29,10 +30,11 @@ class LocationDao extends DAO {
     return recordSnapshot.map((snapshot) => snapshot.value).toList();
   }
 
-  Future<Map<String, dynamic>> getElementByID({
-    @required String collectionPath,
-    @required String id,
-  }) {}
+  @override
+  Future<Map<String, dynamic>> getElementByID({@required String collectionPath, @required String id}) async {
+    final List<Map<String, dynamic>> elementsOfCollection = await listAll(collectionPath);
+    return elementsOfCollection.where((l) => l['id'] == id).first;
+  }
 
   @override
   Future<List<Map<String, dynamic>>> listAllWithTimestampIn(
@@ -45,9 +47,4 @@ class LocationDao extends DAO {
         .where((l) => l.position.timestamp.isAfter(lowerBound) && l.position.timestamp.isBefore(upperBound))
         .map((l) => l.toJson());
   }
-
-  /*db.collection('restaurants')
-      .doc('arinell-pizza')
-      .collection('ratings')
-      .get()*/
 }
