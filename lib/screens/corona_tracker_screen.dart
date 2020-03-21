@@ -4,9 +4,13 @@ import 'package:corona_tracking/FirestoreDAO.dart';
 import 'package:corona_tracking/LocationDAO.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/model/Patient.dart';
+import 'package:corona_tracking/screens/tracking_ui.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:location_permissions/location_permissions.dart';
 
 class CoronaRiskTracker extends StatefulWidget {
   @override
@@ -53,6 +57,9 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
       });
     });
 
+    // run once to get Location
+    _onBackgroundFetch("de.fortysevenapp.coronatracking.location.update");
+
     BackgroundFetch.scheduleTask(
       TaskConfig(
         taskId: "de.fortysevenapp.coronatracking.location.update",
@@ -74,13 +81,17 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
     DateTime timestamp = new DateTime.now();
     // This is the fetch-event callback.
     print("$timestamp [BackgroundFetch] Event received: $taskId");
-    print("Logic starts here");
 
-    var geolocator = Geolocator();
-    Location loc = new Location(await geolocator.getCurrentPosition());
-    print(loc);
+    try {
+      var geolocator = Geolocator();
+      Location loc = new Location(await geolocator.getCurrentPosition());
+      _insertLocationIntoDatabase(loc);
 
-    _insertLocationIntoDatabase(loc);
+    } on PlatformException {
+      showDialog(context: context, barrierDismissible: false, builder: (_) {
+        return PermissionAlert();
+      });
+    }
 
     setState(() {
       _events.insert(0, "$taskId@${timestamp.toString()}");
@@ -136,7 +147,9 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
       onMessage: _calculateDanger,
     );
 
-    return Scaffold(
+    return TrackingUI();
+    /*
+    Scaffold(
       appBar: AppBar(
           title: const Text('Corisk', style: TextStyle(color: Colors.black)),
           backgroundColor: Colors.green,
@@ -194,11 +207,50 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
         ),
       ),
     );
+    */
   }
 
   void _insertLocationIntoDatabase(Location loc) async {
     DAO dao = LocationDAO();
 
     dao.insert(serializable: loc);
+  }
+}
+
+class PermissionAlert extends StatelessWidget {
+  const PermissionAlert({
+    Key key,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    EmojiParser parser = EmojiParser();
+    return AlertDialog(
+      title: Text("Achtung!"),
+      content: Text(parser.emojify("Ohne deine Zustimmung, auf den Standort zuzugreifen, kann die App leider nicht funktionieren. :white_frowning_face:")),
+      actions: <Widget>[
+        // usually buttons at the bottom of the dialog
+        FlatButton(
+          child: Text("Beenden"),
+          onPressed: () {
+            SystemNavigator.pop();
+          },
+        ),
+        FlatButton(
+          child: Text("Alles klar"),
+          onPressed: () async {
+            PermissionStatus permission = await LocationPermissions().requestPermissions();
+            print(permission);
+            if (permission != PermissionStatus.granted){
+              print("Öffne App Settings..");
+              await LocationPermissions().openAppSettings();
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
+      ],
+    );
   }
 }
