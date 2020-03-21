@@ -29,6 +29,10 @@ dependencies:
   cloud_firestore: ^0.12.9+5
   geolocator: ^5.3.0
 
+  # NoSQL dependencies
+  path_provider: ^1.6.5
+  sembast: ^2.3.0
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
