@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -8,19 +7,13 @@ import 'package:background_fetch/background_fetch.dart';
 const EVENTS_KEY = "fetch_events";
 
 
-    FirebaseMessaging().subscribeToTopic("all");
-    FirebaseMessaging().configure(
-      onMessage: calculateDanger,
-    );
 /// This "Headless Task" is run when app is terminated.
 void backgroundFetchHeadlessTask(String taskId) async {
   print("[BackgroundFetch] Headless event received: $taskId");
   DateTime timestamp = DateTime.now();
 
-
   // Read fetch_events from SharedPreferences
   List<String> events = [];
-
   // Add new event.
   events.insert(0, "$taskId@$timestamp [Headless]");
   // Persist fetch events in SharedPreferences
@@ -36,11 +29,6 @@ void backgroundFetchHeadlessTask(String taskId) async {
         stopOnTerminate: false,
         enableHeadless: true
     ));
-  }
-
-  Future<void> calculateDanger(Map<String, dynamic> message) async {
-    // TODO implement
-    return;
   }
 }
 
@@ -73,11 +61,6 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     // Load persisted fetch events from SharedPreferences
-    if (json != null) {
-      setState(() {
-
-      });
-    }
 
     // Configure BackgroundFetch.
     BackgroundFetch.configure(BackgroundFetchConfig(

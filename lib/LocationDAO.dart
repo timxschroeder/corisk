@@ -1,5 +1,5 @@
 import 'package:corona_tracking/LocalDatabase.dart';
-import 'package:corona_tracking/Location.dart';
+import 'package:corona_tracking/model/Location.dart';
 import 'package:sembast/sembast.dart';
 
 class LocationDao {
