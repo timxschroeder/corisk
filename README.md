@@ -1,6 +1,6 @@
 # corona_tracking
 
-A new Flutter application.
+A brand new Flutter application.
 
 ## Getting Started
 
