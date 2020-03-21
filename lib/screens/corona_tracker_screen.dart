@@ -1,9 +1,7 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:corona_tracking/DAO.dart';
-import 'package:corona_tracking/FirestoreDAO.dart';
 import 'package:corona_tracking/LocationDAO.dart';
 import 'package:corona_tracking/model/Location.dart';
-import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/screens/tracking_ui.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -86,11 +84,13 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
       var geolocator = Geolocator();
       Location loc = new Location(await geolocator.getCurrentPosition());
       _insertLocationIntoDatabase(loc);
-
     } on PlatformException {
-      showDialog(context: context, barrierDismissible: false, builder: (_) {
-        return PermissionAlert();
-      });
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) {
+            return PermissionAlert();
+          });
     }
 
     setState(() {
@@ -222,13 +222,13 @@ class PermissionAlert extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     EmojiParser parser = EmojiParser();
     return AlertDialog(
       title: Text("Achtung!"),
-      content: Text(parser.emojify("Ohne deine Zustimmung, auf den Standort zuzugreifen, kann die App leider nicht funktionieren. :white_frowning_face:")),
+      content: Text(parser.emojify(
+          "Ohne deine Zustimmung, auf den Standort zuzugreifen, kann die App leider nicht funktionieren. :white_frowning_face:")),
       actions: <Widget>[
         // usually buttons at the bottom of the dialog
         FlatButton(
@@ -242,7 +242,7 @@ class PermissionAlert extends StatelessWidget {
           onPressed: () async {
             PermissionStatus permission = await LocationPermissions().requestPermissions();
             print(permission);
-            if (permission != PermissionStatus.granted){
+            if (permission != PermissionStatus.granted) {
               print("Öffne App Settings..");
               await LocationPermissions().openAppSettings();
             } else {
