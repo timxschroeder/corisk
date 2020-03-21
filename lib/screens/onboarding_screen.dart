@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:corona_tracking/screens/corona_tracker_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -193,11 +194,9 @@ class OnboardingSection extends StatelessWidget {
             style: kTitleStyle,
           ),
           SizedBox(height: MediaQuery.of(context).size.height*0.019),
-          Expanded(
-            child: Text(
-              subtitle,
-              style: kSubtitleStyle.copyWith(backgroundColor: Colors.green),
-            ),
+          AutoSizeText(
+            subtitle,
+            style: kSubtitleStyle,
           ),
         ],
       ),
