@@ -1,11 +1,7 @@
-import 'dart:async';
 
 import 'package:background_fetch/background_fetch.dart';
-import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 
 const EVENTS_KEY = "fetch_events";
 
