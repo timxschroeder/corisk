@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:background_fetch/background_fetch.dart';
 
 const EVENTS_KEY = "fetch_events";
-
 
 /// This "Headless Task" is run when app is terminated.
 void backgroundFetchHeadlessTask(String taskId) async {
@@ -27,8 +26,7 @@ void backgroundFetchHeadlessTask(String taskId) async {
         periodic: false,
         forceAlarmManager: true,
         stopOnTerminate: false,
-        enableHeadless: true
-    ));
+        enableHeadless: true));
   }
 }
 
@@ -63,23 +61,25 @@ class _MyAppState extends State<MyApp> {
     // Load persisted fetch events from SharedPreferences
 
     // Configure BackgroundFetch.
-    BackgroundFetch.configure(BackgroundFetchConfig(
-      minimumFetchInterval: 15,
-      forceAlarmManager: false,
-      stopOnTerminate: false,
-      startOnBoot: true,
-      enableHeadless: true,
-      requiresBatteryNotLow: false,
-      requiresCharging: false,
-      requiresStorageNotLow: false,
-      requiresDeviceIdle: false,
-      requiredNetworkType: NetworkType.NONE,
-    ), _onBackgroundFetch).then((int status) {
+    BackgroundFetch.configure(
+            BackgroundFetchConfig(
+              minimumFetchInterval: 15,
+              forceAlarmManager: false,
+              stopOnTerminate: false,
+              startOnBoot: true,
+              enableHeadless: true,
+              requiresBatteryNotLow: false,
+              requiresCharging: false,
+              requiresStorageNotLow: false,
+              requiresDeviceIdle: false,
+              requiredNetworkType: NetworkType.NONE,
+            ),
+            _onBackgroundFetch)
+        .then((int status) {
       print('[BackgroundFetch] configure success: $status');
       setState(() {
         _status = status;
       });
-
     }).catchError((e) {
       print('[BackgroundFetch] configure ERROR: $e');
       setState(() {
@@ -96,8 +96,7 @@ class _MyAppState extends State<MyApp> {
         periodic: false,
         forceAlarmManager: true,
         stopOnTerminate: false,
-        enableHeadless: true
-    ));
+        enableHeadless: true));
 
     // Optionally query the current BackgroundFetch status.
     int status = await BackgroundFetch.status;
@@ -128,8 +127,7 @@ class _MyAppState extends State<MyApp> {
           periodic: false,
           forceAlarmManager: true,
           stopOnTerminate: false,
-          enableHeadless: true
-      ));
+          enableHeadless: true));
     }
 
     // IMPORTANT:  You must signal completion of your fetch task or the OS can punish your app
@@ -167,48 +165,62 @@ class _MyAppState extends State<MyApp> {
       _events = [];
     });
   }
+
+  Future<void> _calculateDanger(Map<String, dynamic> message) async {
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
-    const EMPTY_TEXT = Center(child: Text('Waiting for fetch events.  Simulate one.\n [Android] \$ ./scripts/simulate-fetch\n [iOS] XCode->Debug->Simulate Background Fetch'));
+    const EMPTY_TEXT = Center(
+        child: Text(
+            'Waiting for fetch events.  Simulate one.\n [Android] \$ ./scripts/simulate-fetch\n [iOS] XCode->Debug->Simulate Background Fetch'));
+    FirebaseMessaging().subscribeToTopic("all");
+    FirebaseMessaging().configure(
+      onMessage: _calculateDanger,
+    );
 
     return new MaterialApp(
       home: new Scaffold(
         appBar: new AppBar(
-            title: const Text('BackgroundFetch Example', style: TextStyle(color: Colors.black)),
+            title: const Text('BackgroundFetch Example',
+                style: TextStyle(color: Colors.black)),
             backgroundColor: Colors.amberAccent,
             brightness: Brightness.light,
             actions: <Widget>[
               Switch(value: _enabled, onChanged: _onClickEnable),
-            ]
-        ),
-        body: (_events.isEmpty) ? EMPTY_TEXT : Container(
-          child: new ListView.builder(
-              itemCount: _events.length,
-              itemBuilder: (BuildContext context, int index) {
-                List<String> event = _events[index].split("@");
-                return InputDecorator(
-                    decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(left: 5.0, top: 5.0, bottom: 5.0),
-                        labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
-                        labelText: "[${event[0].toString()}]"
-                    ),
-                    child: new Text(event[1], style: TextStyle(color: Colors.black, fontSize: 16.0))
-                );
-              }
-          ),
-        ),
+            ]),
+        body: (_events.isEmpty)
+            ? EMPTY_TEXT
+            : Container(
+                child: new ListView.builder(
+                    itemCount: _events.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      List<String> event = _events[index].split("@");
+                      return InputDecorator(
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.only(
+                                  left: 5.0, top: 5.0, bottom: 5.0),
+                              labelStyle:
+                                  TextStyle(color: Colors.blue, fontSize: 20.0),
+                              labelText: "[${event[0].toString()}]"),
+                          child: new Text(event[1],
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 16.0)));
+                    }),
+              ),
         bottomNavigationBar: BottomAppBar(
             child: Container(
-                padding: EdgeInsets.only(left: 5.0, right:5.0),
+                padding: EdgeInsets.only(left: 5.0, right: 5.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      RaisedButton(onPressed: _onClickStatus, child: Text('Status: $_status')),
-                      RaisedButton(onPressed: _onClickClear, child: Text('Clear'))
-                    ]
-                )
-            )
-        ),
+                      RaisedButton(
+                          onPressed: _onClickStatus,
+                          child: Text('Status: $_status')),
+                      RaisedButton(
+                          onPressed: _onClickClear, child: Text('Clear'))
+                    ]))),
       ),
     );
   }
