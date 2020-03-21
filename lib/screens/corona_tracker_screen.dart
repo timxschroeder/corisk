@@ -3,7 +3,10 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_emoji/flutter_emoji.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:location_permissions/location_permissions.dart';
 
 class CoronaRiskTracker extends StatefulWidget {
   @override
@@ -50,6 +53,9 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
       });
     });
 
+    // run once to get Location
+    _onBackgroundFetch("de.fortysevenapp.coronatracking.location.update");
+
     BackgroundFetch.scheduleTask(
       TaskConfig(
         taskId: "de.fortysevenapp.coronatracking.location.update",
@@ -71,11 +77,17 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
     DateTime timestamp = new DateTime.now();
     // This is the fetch-event callback.
     print("$timestamp [BackgroundFetch] Event received: $taskId");
-    print("Logic starts here");
 
-    var geolocator = Geolocator();
-    Location loc = new Location(await geolocator.getCurrentPosition());
-    print(loc);
+    try {
+      var geolocator = Geolocator();
+      Location loc = new Location(await geolocator.getCurrentPosition());
+      print(loc);
+    } on PlatformException catch (e) {
+      showDialog(barrierDismissible: false, builder: (_) {
+        return PermissionAlert(context: context);
+      });
+    }
+
 
     // TODO: Insert into database
     setState(() {
@@ -167,6 +179,46 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class PermissionAlert extends StatelessWidget {
+  const PermissionAlert({
+    Key key,
+    @required this.context,
+  }) : super(key: key);
+
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext context) {
+    EmojiParser parser = EmojiParser();
+    return AlertDialog(
+      title: Text("Achtung!"),
+      content: Text(parser.emojify("Ohne deine Zustimmung, auf den Standort zuzugreifen, kann die App leider nicht funktionieren. :white_frowning_face:")),
+      actions: <Widget>[
+        // usually buttons at the bottom of the dialog
+        FlatButton(
+          child: Text("Beenden"),
+          onPressed: () {
+            SystemNavigator.pop();
+          },
+        ),
+        FlatButton(
+          child: Text("Alles klar"),
+          onPressed: () async {
+            PermissionStatus permission = await LocationPermissions().requestPermissions();
+            print(permission);
+            if (permission != PermissionStatus.granted){
+              print("Öffne App Settings..");
+              await LocationPermissions().openAppSettings();
+            } else {
+              Navigator.pop(context);
+            }
+          },
+        ),
+      ],
     );
   }
 }
