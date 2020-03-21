@@ -1,6 +1,6 @@
-
 import 'package:background_fetch/background_fetch.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
+import 'package:corona_tracking/FirebaseConfigurator.dart';
 import 'package:flutter/material.dart';
 
 const EVENTS_KEY = "fetch_events";
@@ -34,6 +34,7 @@ void backgroundFetchHeadlessTask(String taskId) async {
 }
 
 void main() {
+  FirebaseConfigurator();
   runApp(App());
 
   // Register to receive BackgroundFetch events after app is terminated.
@@ -42,10 +43,8 @@ void main() {
 }
 
 class App extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-
     // TODO check if user has seen onboarding before
     return MaterialApp(
       title: "Corisk",
