@@ -11,7 +11,6 @@
 
     <application
         tools:replace="android:label"
-        android:name="io.flutter.app.FlutterApplication"
         android:label="corona_tracking"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -32,4 +31,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <meta-data
+        android:name="flutterEmbedding"
+        android:value="2" />
 </manifest>
