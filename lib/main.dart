@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'package:corona_tracking/model/Location.dart';
+import 'package:corona_tracking/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:background_fetch/background_fetch.dart';
+import 'package:geolocator/geolocator.dart';
 
 const EVENTS_KEY = "fetch_events";
 
 /// This "Headless Task" is run when app is terminated.
 void backgroundFetchHeadlessTask(String taskId) async {
   print("[BackgroundFetch] Headless event received: $taskId");
+  print("Corona Tracking -- ");
   DateTime timestamp = DateTime.now();
 
   // Read fetch_events from SharedPreferences
@@ -31,8 +35,6 @@ void backgroundFetchHeadlessTask(String taskId) async {
 }
 
 void main() {
-  // Enable integration testing with the Flutter Driver extension.
-  // See https://flutter.io/testing/ for more info.
   runApp(new MyApp());
 
   // Register to receive BackgroundFetch events after app is terminated.
@@ -58,8 +60,6 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    // Load persisted fetch events from SharedPreferences
-
     // Configure BackgroundFetch.
     BackgroundFetch.configure(
             BackgroundFetchConfig(
@@ -87,22 +87,16 @@ class _MyAppState extends State<MyApp> {
       });
     });
 
-    // Schedule a "one-shot" custom-task in 10000ms.
-    // These are fairly reliable on Android (particularly with forceAlarmManager) but not iOS,
-    // where device must be powered (and delay will be throttled by the OS).
-    BackgroundFetch.scheduleTask(TaskConfig(
-        taskId: "com.transistorsoft.customtask",
-        delay: 10000,
-        periodic: false,
+    BackgroundFetch.scheduleTask(
+      TaskConfig(
+        taskId: "de.fortysevenapp.coronatracking.location.update",
+        delay: 1000,
+        periodic: true,
         forceAlarmManager: true,
         stopOnTerminate: false,
-        enableHeadless: true));
-
-    // Optionally query the current BackgroundFetch status.
-    int status = await BackgroundFetch.status;
-    setState(() {
-      _status = status;
-    });
+        enableHeadless: true,
+      ),
+    );
 
     // If the widget was removed from the tree while the asynchronous platform
     // message was in flight, we want to discard the reply rather than calling
@@ -113,22 +107,17 @@ class _MyAppState extends State<MyApp> {
   void _onBackgroundFetch(String taskId) async {
     DateTime timestamp = new DateTime.now();
     // This is the fetch-event callback.
-    print("[BackgroundFetch] Event received: $taskId");
+    print("$timestamp [BackgroundFetch] Event received: $taskId");
+    print("Logic starts here");
+
+    var geolocator = Geolocator();
+    Location loc = new Location(await geolocator.getCurrentPosition(), Uuid().generateV4());
+    print(loc);
+
+    // TODO: Insert into database
     setState(() {
       _events.insert(0, "$taskId@${timestamp.toString()}");
     });
-    // Persist fetch events in SharedPreferences
-
-    if (taskId == "flutter_background_fetch") {
-      // Schedule a one-shot task when fetch event received (for testing).
-      BackgroundFetch.scheduleTask(TaskConfig(
-          taskId: "com.transistorsoft.customtask",
-          delay: 5000,
-          periodic: false,
-          forceAlarmManager: true,
-          stopOnTerminate: false,
-          enableHeadless: true));
-    }
 
     // IMPORTANT:  You must signal completion of your fetch task or the OS can punish your app
     // for taking too long in the background.
@@ -180,12 +169,11 @@ class _MyAppState extends State<MyApp> {
       onMessage: _calculateDanger,
     );
 
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: new AppBar(
-            title: const Text('BackgroundFetch Example',
-                style: TextStyle(color: Colors.black)),
-            backgroundColor: Colors.amberAccent,
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+            title: const Text('Corisk', style: TextStyle(color: Colors.black)),
+            backgroundColor: Colors.green,
             brightness: Brightness.light,
             actions: <Widget>[
               Switch(value: _enabled, onChanged: _onClickEnable),
@@ -199,28 +187,24 @@ class _MyAppState extends State<MyApp> {
                       List<String> event = _events[index].split("@");
                       return InputDecorator(
                           decoration: InputDecoration(
-                              contentPadding: EdgeInsets.only(
-                                  left: 5.0, top: 5.0, bottom: 5.0),
-                              labelStyle:
-                                  TextStyle(color: Colors.blue, fontSize: 20.0),
+                              contentPadding: EdgeInsets.only(left: 5.0, top: 5.0, bottom: 5.0),
+                              labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
                               labelText: "[${event[0].toString()}]"),
-                          child: new Text(event[1],
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 16.0)));
+                          child: new Text(event[1], style: TextStyle(color: Colors.black, fontSize: 16.0)));
                     }),
               ),
         bottomNavigationBar: BottomAppBar(
-            child: Container(
-                padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RaisedButton(
-                          onPressed: _onClickStatus,
-                          child: Text('Status: $_status')),
-                      RaisedButton(
-                          onPressed: _onClickClear, child: Text('Clear'))
-                    ]))),
+          child: Container(
+            padding: EdgeInsets.only(left: 5.0, right: 5.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                RaisedButton(onPressed: _onClickStatus, child: Text('Status: $_status')),
+                RaisedButton(onPressed: _onClickClear, child: Text('Clear'))
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
