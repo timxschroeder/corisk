@@ -68,11 +68,12 @@ class TrackingUI extends StatelessWidget {
 class RiskIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double percent = 0.44;
+    double percent = 0.995;
     return CircularPercentIndicator(
       radius: 300.0,
       lineWidth: 45.0,
       animation: true,
+      percent: percent,
       center: Text(
         NumberFormat.percentPattern().format(percent),
         style: kSubtitleStyle,
