@@ -9,8 +9,6 @@ class Location extends Serializable {
   @override
   String get collectionName => COLLECTION_NAME;
 
-  final String id;
-
   final Position position;
 
   @override
@@ -26,13 +24,15 @@ class Location extends Serializable {
   @override
   int get hashCode => id.hashCode ^ position.hashCode;
 
-  Location(this.position, this.id);
+  Location(this.position);
 
-  @override
-  fromJsonInternal(Map<String, dynamic> json) {
-    return Location(Position.fromMap(json['position']), json['id']);
+  Location.fromJson(Map<String, dynamic> json)
+      : this.position = Position.fromMap(json['position']),
+        super() {
+    this.id = json['id'];
   }
 
+  @override
   Map<String, dynamic> toJson() => {
         'id': id,
         'position': position.toJson(),
