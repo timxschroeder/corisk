@@ -1,3 +1,5 @@
+import 'package:corona_tracking/uuid.dart';
+
 /// Every Object that is stored in the database needs to extend from this class.
 /// The collectionName is used by {DAO} to refer to the collection in the database.
 ///
@@ -9,13 +11,7 @@ abstract class Serializable {
 
   String id;
 
-  Serializable();
+  Serializable() : id = Uuid().generateV4();
 
   toJson();
-
-  fromJsonInternal(Map<String, dynamic> json);
-
-  Serializable.fromJson(Map<String, dynamic> json) {
-    fromJsonInternal(json);
-  }
 }

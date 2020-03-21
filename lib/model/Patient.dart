@@ -10,12 +10,10 @@ class Patient extends Serializable {
 
   Patient();
 
+  @override
   toJson() {
     return;
   }
 
-  @override
-  fromJsonInternal(Map<String, dynamic> json) {
-    return Patient();
-  }
+  Patient.fromJson(Map<String, dynamic> json);
 }

@@ -38,7 +38,7 @@ class FirestoreDAOImpl extends FirestoreDAO {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> listAll<T>(String collectionPath) async {
+  Future<List<Map<String, dynamic>>> listAll(String collectionPath) async {
     final QuerySnapshot snapshot = await getCollectionReference(collectionPath).getDocuments();
     final List<DocumentSnapshot> documentSnapshots = snapshot.documents;
     final List<Map<String, dynamic>> results = [];
@@ -51,7 +51,7 @@ class FirestoreDAOImpl extends FirestoreDAO {
   }
 
   @override
-  Future<T> getElementByID<T>({@required String collectionPath, @required String id}) async {
+  Future<Map<String, dynamic>> getElementByID({@required String collectionPath, @required String id}) async {
     DocumentSnapshot document;
     try {
       document = await getCollectionReference(collectionPath).document(id).get();
@@ -62,17 +62,15 @@ class FirestoreDAOImpl extends FirestoreDAO {
     }
 
     if (document.exists) {
-      return Serializable.fromJson(document.data);
+      return document.data;
     } else {
       throw NoElementsError('Document $id does not exist');
     }
   }
 
   @override
-  Future<List<T>> listAllWithTimestampIn<T>(
-      {@required String collectionPath,
-      @required Timestamp lowerBound,
-      @required Timestamp upperBound}) async {
+  Future<List<Map<String, dynamic>>> listAllWithTimestampIn(
+      {@required String collectionPath, @required DateTime lowerBound, @required DateTime upperBound}) async {
     try {
       final QuerySnapshot snapshot = await getCollectionReference(collectionPath)
           .where("Timestamp", isGreaterThan: lowerBound)
@@ -80,11 +78,11 @@ class FirestoreDAOImpl extends FirestoreDAO {
           .getDocuments();
 
       final List<DocumentSnapshot> documentSnapshots = snapshot.documents;
-      final List<T> results = [];
+      final List<Map<String, dynamic>> results = [];
 
       documentSnapshots.forEach(
         (ds) => results.add(
-          Serializable.fromJson(ds.data),
+          ds.data,
         ),
       );
       return results;
