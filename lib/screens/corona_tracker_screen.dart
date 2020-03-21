@@ -4,6 +4,7 @@ import 'package:corona_tracking/FirestoreDAO.dart';
 import 'package:corona_tracking/LocationDAO.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/model/Patient.dart';
+import 'package:corona_tracking/screens/tracking_ui.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -84,15 +85,13 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
     try {
       var geolocator = Geolocator();
       Location loc = new Location(await geolocator.getCurrentPosition());
-      print(loc);
-    } on PlatformException catch (e) {
-      showDialog(barrierDismissible: false, builder: (_) {
-        return PermissionAlert(context: context);
+      _insertLocationIntoDatabase(loc);
+
+    } on PlatformException {
+      showDialog(context: context, barrierDismissible: false, builder: (_) {
+        return PermissionAlert();
       });
     }
-
-
-    _insertLocationIntoDatabase(loc);
 
     setState(() {
       _events.insert(0, "$taskId@${timestamp.toString()}");
@@ -148,7 +147,9 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
       onMessage: _calculateDanger,
     );
 
-    return Scaffold(
+    return TrackingUI();
+    /*
+    Scaffold(
       appBar: AppBar(
           title: const Text('Corisk', style: TextStyle(color: Colors.black)),
           backgroundColor: Colors.green,
@@ -206,6 +207,7 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
         ),
       ),
     );
+    */
   }
 
   void _insertLocationIntoDatabase(Location loc) async {
@@ -218,10 +220,8 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
 class PermissionAlert extends StatelessWidget {
   const PermissionAlert({
     Key key,
-    @required this.context,
   }) : super(key: key);
 
-  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
