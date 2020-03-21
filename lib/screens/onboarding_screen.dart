@@ -72,7 +72,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 Container(
-                  height: 600.0,
+                  height: MediaQuery.of(context).size.height * 0.75,
                   child: PageView(
                     physics: ClampingScrollPhysics(),
                     controller: _pageController,
@@ -184,20 +184,19 @@ class OnboardingSection extends StatelessWidget {
               image: AssetImage(
                 imagePath,
               ),
-              height: 300.0,
-              width: 300.0,
+              height: MediaQuery.of(context).size.height*0.38,
             ),
           ),
-          SizedBox(height: 30.0),
+          SizedBox(height: MediaQuery.of(context).size.height*0.038),
           Text(
             title,
             style: kTitleStyle,
           ),
-          SizedBox(height: 15.0),
+          SizedBox(height: MediaQuery.of(context).size.height*0.019),
           Expanded(
             child: Text(
               subtitle,
-              style: kSubtitleStyle,
+              style: kSubtitleStyle.copyWith(backgroundColor: Colors.green),
             ),
           ),
         ],
