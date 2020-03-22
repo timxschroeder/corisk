@@ -77,7 +77,7 @@ Future<dynamic> onMessage(Map<String, dynamic> message) async {
   final String patientId = message['data']['patientId'] ?? message['patientId'];
 
   final List<Location> localLocations =
-      (await _ldao.listAll(Location.COLLECTION_NAME)).map((l) => Location.fromJson(l));
+  (await _ldao.listAll(Location.COLLECTION_NAME)).map((l) => Location.fromJson(l)).toList();
 
   final String collection = "${Patient.COLLECTION_NAME}/$patientId/${Location.COLLECTION_NAME}";
   final List<Location> patientLocations =

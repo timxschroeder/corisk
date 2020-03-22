@@ -52,7 +52,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
                   backgroundColor: Color(0xFFD6E9F8),
                   title: Text("Hochladen abgeschlossen"),
                   content: Text(
-                      "Vielen Dank für das Teilen deiner Infektion. Wir werden umgehend die Betroffenden informieren."),
+                      "Vielen Dank für das Teilen deiner Infektion. Wir werden umgehend die Betroffenen informieren."),
                   actions: <Widget>[
                     // usually buttons at the bottom of the dialog
                     FlatButton(
