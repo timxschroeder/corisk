@@ -1,7 +1,13 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:corona_tracking/FirebaseConfigurator.dart';
+import 'package:corona_tracking/model/UISettings.dart';
+import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
+import 'package:corona_tracking/redux/AppState.dart';
+import 'package:corona_tracking/redux/Middleware/uiSettingsMiddleware.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
 const EVENTS_KEY = "fetch_events";
 
@@ -44,13 +50,24 @@ void main() {
 }
 
 class App extends StatelessWidget {
+  final Store<AppState> store = Store<AppState>(
+    stateReducer,
+    initialState: AppState(UISettings(true, false)),
+    middleware: []..addAll(createUISettingsMiddleware()),
+  );
+
   @override
   Widget build(BuildContext context) {
+    store.dispatch(InitializeUISettingsAction());
+
     // TODO check if user has seen onboarding before
-    return MaterialApp(
-      title: "Corisk",
-      debugShowCheckedModeBanner: false,
-      home: OnboardingScreen(),
+    return StoreProvider<AppState>(
+      store: store,
+      child: MaterialApp(
+        title: "Corisk",
+        debugShowCheckedModeBanner: false,
+        home: OnboardingScreen(),
+      ),
     );
   }
 }

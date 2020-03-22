@@ -1,0 +1,59 @@
+import 'package:corona_tracking/redux/AppState.dart';
+import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
+import 'package:corona_tracking/screens/tracking_ui.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+
+class CustomPopup extends StatefulWidget {
+  CustomPopup({
+    @required this.items,
+    @required this.builderFunction,
+  });
+
+  final List<dynamic> items;
+  final Function(BuildContext context, dynamic item) builderFunction;
+
+  @override
+  _CustomPopupState createState() => _CustomPopupState();
+}
+
+class _CustomPopupState extends State<CustomPopup> {
+  @override
+  Widget build(BuildContext context) {
+    print("CustomPopupState" + InheritedDataProvider.of(context).buttonState.shouldShow.toString());
+
+    return StoreConnector<AppState, UISettingsViewModel>(
+        converter: (Store<AppState> store) => UISettingsViewModel.from(store),
+        builder: (context, UISettingsViewModel uiSettingsViewModel) {
+          return Offstage(
+            offstage: !uiSettingsViewModel.uiSettings.infectionLevelButtonClicked,
+            child: AnimatedContainer(
+              duration: Duration(milliseconds: 300),
+              height: uiSettingsViewModel.uiSettings.infectionLevelButtonClicked
+                  ? MediaQuery.of(context).size.height / 3
+                  : 0,
+              width: MediaQuery.of(context).size.width / 3,
+              child: Card(
+                elevation: 3,
+                child: MediaQuery.removePadding(
+                  context: context,
+                  removeTop: true,
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: widget.items.length,
+                    itemBuilder: (context, index) {
+                      Widget item = widget.builderFunction(
+                        context,
+                        widget.items[index],
+                      );
+                      return item;
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+}
