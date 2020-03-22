@@ -2,8 +2,10 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:corona_tracking/FirebaseConfigurator.dart';
 import 'package:corona_tracking/model/UISettings.dart';
 import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
+import 'package:corona_tracking/redux/Actions/MessageActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/Middleware/criticalMeetingsMiddleware.dart';
+import 'package:corona_tracking/redux/Middleware/messageMiddleware.dart';
 import 'package:corona_tracking/redux/Middleware/uiSettingsMiddleware.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
 import 'package:corona_tracking/Notificator.dart';
@@ -58,7 +60,8 @@ void main() {
     initialState: AppState(UISettings(false, false)),
     middleware: []
       ..addAll(createUISettingsMiddleware())
-      ..addAll(createCriticalMeetingsMiddleware()),
+      ..addAll(createCriticalMeetingsMiddleware())
+      ..addAll(createMessageMiddleware()),
   );
 
   runApp(App(store));
@@ -70,7 +73,6 @@ void main() {
 
 class App extends StatelessWidget {
   final Store<AppState> store;
-  final FirebaseConfigurator configurator = FirebaseConfigurator();
 
   App(this.store);
 
@@ -104,9 +106,10 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Notificator().init();
-    configurator.configure(this.onMessage);
-    configurator.subscribe("infections");
+    //configurator.subscribe("infections");
     store.dispatch(InitializeUISettingsAction());
+    store.dispatch(ConfigureMessageHandlerAction(onMessage: this.onMessage));
+    store.dispatch(UpdateDeviceMessagingTokenAction());
 
     // TODO check if user has seen onboarding before
     return StoreProvider<AppState>(

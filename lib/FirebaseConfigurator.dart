@@ -19,4 +19,8 @@ class FirebaseConfigurator {
       onMessage: onMessage,
     );
   }
+
+  Future<String> getFirebaseMessagingToken() async {
+    return await _messaging.getToken();
+  }
 }
