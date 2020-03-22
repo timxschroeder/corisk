@@ -3,12 +3,22 @@ import 'package:corona_tracking/FirebaseConfigurator.dart';
 import 'package:corona_tracking/model/UISettings.dart';
 import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';
+import 'package:corona_tracking/redux/Middleware/criticalMeetingsMiddleware.dart';
 import 'package:corona_tracking/redux/Middleware/uiSettingsMiddleware.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
 import 'package:corona_tracking/Notificator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+
+import 'package:corona_tracking/LocalDAO.dart';
+import 'package:corona_tracking/model/CriticalMeeting.dart';
+import 'package:corona_tracking/model/Location.dart';
+import 'package:corona_tracking/model/Patient.dart';
+import 'package:corona_tracking/FirestoreDAO.dart';
+import 'package:corona_tracking/DAO.dart';
+
+import 'package:corona_tracking/MeetingDetector.dart';
 
 const EVENTS_KEY = "fetch_events";
 
@@ -42,9 +52,16 @@ void backgroundFetchHeadlessTask(String taskId) async {
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseConfigurator();
-  Notificator().init();
-  runApp(App());
+
+  final Store<AppState> store = Store<AppState>(
+    stateReducer,
+    initialState: AppState(UISettings(false, false)),
+    middleware: []
+      ..addAll(createUISettingsMiddleware())
+      ..addAll(createCriticalMeetingsMiddleware()),
+  );
+
+  runApp(App(store));
 
   // Register to receive BackgroundFetch events after app is terminated.
   // Requires {stopOnTerminate: false, enableHeadless: true}
@@ -52,14 +69,43 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  final Store<AppState> store = Store<AppState>(
-    stateReducer,
-    initialState: AppState(UISettings(false, false)),
-    middleware: []..addAll(createUISettingsMiddleware()),
-  );
+  final Store<AppState> store;
+  final FirebaseConfigurator configurator = FirebaseConfigurator();
+
+  App(this.store);
+
+  Future<dynamic> onMessage(Map<String, dynamic> message) async {
+    final DAO _ldao = LocalDAO();
+    final DAO _fdao = FirestoreDAOImpl();
+    print('message received: $message');
+    final String patientId =
+        message['data']['patientId'] ?? message['patientId'];
+
+    final List<Location> localLocations =
+        (await _ldao.listAll(Location.COLLECTION_NAME))
+            .map((l) => Location.fromJson(l));
+
+    final String collection =
+        "${Patient.COLLECTION_NAME}/$patientId/${Location.COLLECTION_NAME}";
+    final List<Location> patientLocations =
+        (await _fdao.listAll(collection)).map((l) => Location.fromJson(l));
+
+    final MeetingDetector riskCalculator =
+        MeetingDetector(localLocations, patientLocations);
+
+    final List<CriticalMeeting> criticalPoints = riskCalculator.criticalPoints();
+    if (criticalPoints.isNotEmpty) {
+      final note = Notificator();
+      await note.showNotification('Gefahr erkannt',
+          'In ihrem Bewegungsprofil gibt es Überscheidungen mit Corona-Patienten');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    Notificator().init();
+    configurator.configure(this.onMessage);
+    configurator.subscribe("infections");
     store.dispatch(InitializeUISettingsAction());
 
     // TODO check if user has seen onboarding before

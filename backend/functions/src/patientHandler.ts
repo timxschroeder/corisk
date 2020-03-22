@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 const REGION = 'europe-west1'; // Belgium, closest to Firestore location (europe-west2 - Frankfurt)
 
 export const handleNewPatient =
-    functions.region(REGION).firestore.document('Patients/{patientID}')
+    functions.region(REGION).firestore.document('Patient/{patientID}')
         .onCreate((snapshot, _) => {
             const patient = snapshot.data();
 
@@ -12,6 +12,9 @@ export const handleNewPatient =
 
             if (patient !== undefined) {
                 return sendPatientId(patient.id)
+                    .then((result) => {
+                        console.log("Successfully sent patient ID")
+                    })
                     .catch((err: Error) => {
                         console.log("Error occured");
                         console.log(err);

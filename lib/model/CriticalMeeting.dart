@@ -2,6 +2,13 @@ import 'package:corona_tracking/Serializable.dart';
 import 'package:corona_tracking/model/Location.dart';
 
 class CriticalMeeting extends Serializable {
+  /// for DAO-Call
+  static const String COLLECTION_NAME = "CriticalMeeting";
+
+  /// for DAO-intern
+  @override
+  String get collectionName => COLLECTION_NAME;
+
   final Location location;
 
   /// in meters

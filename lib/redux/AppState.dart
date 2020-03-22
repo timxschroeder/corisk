@@ -1,4 +1,6 @@
+import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:corona_tracking/model/UISettings.dart';
+import 'package:corona_tracking/redux/Reducer/criticalMeetingsReducer.dart';
 import 'package:corona_tracking/redux/Reducer/uiSettingsReducer.dart';
 import 'package:corona_tracking/redux/Selectors/Selectors.dart';
 
@@ -11,11 +13,14 @@ import 'package:corona_tracking/redux/Selectors/Selectors.dart';
 class AppState {
   UISettings uiSettings;
 
+  List<CriticalMeeting> criticalMeetings;
+
   AppState(this.uiSettings);
 }
 
 AppState stateReducer(AppState state, action) {
   state.uiSettings = uiSettingsReducer(uiSettingsSelector(state), action);
+  state.criticalMeetings = criticalMeetingsReducer(criticalMeetingsSelector(state), action);
 
   return state;
 }

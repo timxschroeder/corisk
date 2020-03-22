@@ -1,6 +1,6 @@
 import 'package:corona_tracking/DAO.dart';
 import 'package:corona_tracking/FirestoreDAO.dart';
-import 'package:corona_tracking/LocationDAO.dart';
+import 'package:corona_tracking/LocalDAO.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
@@ -100,7 +100,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
   }
 
   Future<void> _uploadLocationData() async {
-    final DAO locationDao = LocationDAO();
+    final DAO locationDao = LocalDAO();
     final FirestoreDAOImpl firebaseDao = FirestoreDAOImpl();
     final List<Location> locations = [];
 

@@ -1,6 +1,6 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:corona_tracking/DAO.dart';
-import 'package:corona_tracking/LocationDAO.dart';
+import 'package:corona_tracking/LocalDAO.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/screens/tracking_ui.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -211,7 +211,7 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
   }
 
   void _insertLocationIntoDatabase(Location loc) async {
-    DAO dao = LocationDAO();
+    DAO dao = LocalDAO();
 
     dao.insert(serializable: loc);
   }
