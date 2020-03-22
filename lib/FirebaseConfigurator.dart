@@ -5,6 +5,7 @@ import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/LocationDAO.dart';
 import 'package:corona_tracking/FirestoreDAO.dart';
 import 'package:corona_tracking/DAO.dart';
+
 import 'package:corona_tracking/MeetingDetector.dart';
 
 class FirebaseConfigurator {
@@ -17,9 +18,9 @@ class FirebaseConfigurator {
   }
 
   Future<void> _onMessage(Map<String, dynamic> message) async {
-
     // TODO Android und ios berücksichtigen
     // TODO Berechtigungen für iOS Benachrichtigungen
+
     final String patientId =
         message['data']['patientId'] ?? message['patientId'];
 

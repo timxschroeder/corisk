@@ -1,6 +1,7 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:corona_tracking/FirebaseConfigurator.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
+import 'package:corona_tracking/Notificator.dart';
 import 'package:flutter/material.dart';
 
 const EVENTS_KEY = "fetch_events";
@@ -36,6 +37,7 @@ void backgroundFetchHeadlessTask(String taskId) async {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseConfigurator();
+  Notificator().init();
   runApp(App());
 
   // Register to receive BackgroundFetch events after app is terminated.
