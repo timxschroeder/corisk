@@ -3,6 +3,7 @@ import 'package:corona_tracking/ScrollablePopup.dart';
 import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/redux/AppState.dart';
+import 'package:corona_tracking/redux/ViewModels/CriticalMeetingsViewModel.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
 import 'package:corona_tracking/utilities/styles.dart';
 import 'package:flutter/material.dart';
@@ -40,30 +41,33 @@ class TrackingUI extends StatelessWidget {
               Center(child: RiskIndicator()),
               //Positioned(child: AnimatedButton(), top: 200.0),
 
-              CustomPopup(
-                criticalMeetings: [
-                  CriticalMeeting(
-                      Location(
-                          Position(latitude: 53.892068, longitude: 10.637399, timestamp: DateTime.now())),
-                      100.0),
-                  CriticalMeeting(
-                      Location(
-                          Position(latitude: 53.892068, longitude: 10.637399, timestamp: DateTime.now())),
-                      100.0),
-                  CriticalMeeting(
-                      Location(
-                          Position(latitude: 53.892068, longitude: 10.637399, timestamp: DateTime.now())),
-                      100.0)
-                ],
-                builderFunction: (context, item) {
-                  return ListTile(title: Text(item.toString()), onTap: () {});
-                },
-              ),
+              MeetingPopUp(),
             ],
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: AnimatedButton());
+  }
+}
+
+class MeetingPopUp extends StatelessWidget {
+  const MeetingPopUp({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, CriticalMeetingsViewModel>(
+      converter: (Store<AppState> store) => CriticalMeetingsViewModel.from(store),
+      builder: (context, CriticalMeetingsViewModel viewModel) {
+        return CustomPopup(
+          criticalMeetings: viewModel.meetings,
+          builderFunction: (context, item) {
+            return ListTile(title: Text(item.toString()), onTap: () {});
+          },
+        );
+      },
+    );
   }
 }
 

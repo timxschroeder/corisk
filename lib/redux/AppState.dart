@@ -15,7 +15,12 @@ class AppState {
 
   List<CriticalMeeting> criticalMeetings;
 
-  AppState(this.uiSettings);
+  AppState();
+  
+  factory AppState.initialState() {
+    return AppState()..uiSettings = UISettings(true, false)
+    ..criticalMeetings = [];
+  }
 }
 
 AppState stateReducer(AppState state, action) {

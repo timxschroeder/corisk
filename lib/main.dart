@@ -8,6 +8,8 @@ import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/model/UISettings.dart';
+import 'package:corona_tracking/redux/Actions/CriticalMeetingsActions.dart';
+import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/Actions/MessageActions.dart';
 import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';
@@ -49,17 +51,17 @@ void backgroundFetchHeadlessTask(String taskId) async {
   }
 }
 
+final Store<AppState> store = Store<AppState>(
+  stateReducer,
+  initialState: AppState.initialState(),
+  middleware: []
+    ..addAll(createUISettingsMiddleware())
+    ..addAll(createCriticalMeetingsMiddleware())
+    ..addAll(createMessageMiddleware()),
+);
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
-  final Store<AppState> store = Store<AppState>(
-    stateReducer,
-    initialState: AppState(UISettings(true, false, false)),
-    middleware: []
-      ..addAll(createUISettingsMiddleware())
-      ..addAll(createCriticalMeetingsMiddleware())
-      ..addAll(createMessageMiddleware()),
-  );
 
   runApp(App(store));
 
@@ -83,8 +85,10 @@ Future<dynamic> onMessage(Map<String, dynamic> message) async {
 
   final MeetingDetector riskCalculator = MeetingDetector(localLocations, patientLocations);
 
-  final List<CriticalMeeting> criticalPoints = riskCalculator.criticalPoints();
-  if (criticalPoints.isNotEmpty) {
+  final List<CriticalMeeting> criticalMeetings = riskCalculator.criticalPoints();
+  if (criticalMeetings.isNotEmpty) {
+    store.dispatch(AddCriticalMeetingsAction(criticalMeetings));
+
     final note = Notificator();
     await note.showNotification(
         'Gefahr erkannt', 'In ihrem Bewegungsprofil gibt es Überscheidungen mit Corona-Patienten');
