@@ -101,7 +101,8 @@ class App extends StatelessWidget {
     Notificator().init();
     //configurator.subscribe("infections");
     store.dispatch(InitializeUISettingsAction());
-    store.dispatch(ConfigureMessageHandlerAction(onMessage: onMessage));
+
+    store.dispatch(ConfigureMessageHandlerAction(topic: "infected", onMessage: onMessage));
     store.dispatch(UpdateDeviceMessagingTokenAction());
 
     // TODO check if user has seen onboarding before

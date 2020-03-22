@@ -13,6 +13,7 @@ List<Middleware<AppState>> createMessageMiddleware() {
 
 Middleware<AppState> _configureMessageHandler = (store, action, next) {
   final FirebaseConfigurator _messageService = FirebaseConfigurator();
+  _messageService.subscribe(action.topic);
   _messageService.configure(
     action.onMessage,
   );
