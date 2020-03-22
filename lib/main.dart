@@ -1,5 +1,13 @@
 import 'package:background_fetch/background_fetch.dart';
 import 'package:corona_tracking/FirebaseConfigurator.dart';
+import 'package:corona_tracking/MeetingDetector.dart';
+import 'package:corona_tracking/Notificator.dart';
+import 'package:corona_tracking/database/DAO.dart';
+import 'package:corona_tracking/database/FirestoreDAO.dart';
+import 'package:corona_tracking/database/LocalDAO.dart';
+import 'package:corona_tracking/model/CriticalMeeting.dart';
+import 'package:corona_tracking/model/Location.dart';
+import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/model/UISettings.dart';
 import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/Actions/MessageActions.dart';
@@ -8,19 +16,9 @@ import 'package:corona_tracking/redux/Middleware/criticalMeetingsMiddleware.dart
 import 'package:corona_tracking/redux/Middleware/messageMiddleware.dart';
 import 'package:corona_tracking/redux/Middleware/uiSettingsMiddleware.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
-import 'package:corona_tracking/Notificator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-
-import 'package:corona_tracking/LocalDAO.dart';
-import 'package:corona_tracking/model/CriticalMeeting.dart';
-import 'package:corona_tracking/model/Location.dart';
-import 'package:corona_tracking/model/Patient.dart';
-import 'package:corona_tracking/FirestoreDAO.dart';
-import 'package:corona_tracking/DAO.dart';
-
-import 'package:corona_tracking/MeetingDetector.dart';
 
 const EVENTS_KEY = "fetch_events";
 
@@ -80,26 +78,22 @@ class App extends StatelessWidget {
     final DAO _ldao = LocalDAO();
     final DAO _fdao = FirestoreDAOImpl();
     print('message received: $message');
-    final String patientId =
-        message['data']['patientId'] ?? message['patientId'];
+    final String patientId = message['data']['patientId'] ?? message['patientId'];
 
     final List<Location> localLocations =
-        (await _ldao.listAll(Location.COLLECTION_NAME))
-            .map((l) => Location.fromJson(l));
+        (await _ldao.listAll(Location.COLLECTION_NAME)).map((l) => Location.fromJson(l));
 
-    final String collection =
-        "${Patient.COLLECTION_NAME}/$patientId/${Location.COLLECTION_NAME}";
+    final String collection = "${Patient.COLLECTION_NAME}/$patientId/${Location.COLLECTION_NAME}";
     final List<Location> patientLocations =
         (await _fdao.listAll(collection)).map((l) => Location.fromJson(l));
 
-    final MeetingDetector riskCalculator =
-        MeetingDetector(localLocations, patientLocations);
+    final MeetingDetector riskCalculator = MeetingDetector(localLocations, patientLocations);
 
     final List<CriticalMeeting> criticalPoints = riskCalculator.criticalPoints();
     if (criticalPoints.isNotEmpty) {
       final note = Notificator();
-      await note.showNotification('Gefahr erkannt',
-          'In ihrem Bewegungsprofil gibt es Überscheidungen mit Corona-Patienten');
+      await note.showNotification(
+          'Gefahr erkannt', 'In ihrem Bewegungsprofil gibt es Überscheidungen mit Corona-Patienten');
     }
   }
 

@@ -71,36 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.75,
-                  child: PageView(
-                    physics: ClampingScrollPhysics(),
-                    controller: _pageController,
-                    onPageChanged: (int page) {
-                      setState(() {
-                        _currentPage = page;
-                      });
-                    },
-                    children: <Widget>[
-                      OnboardingSection(
-                        title: "Schütze Dich und Deine Nächsten",
-                        imagePath: 'assets/images/family.png',
-                        subtitle:
-                            'In der heutigen Zeit ist es schwer nachzuvollziehen, mit wem wir in den letzten Wochen Kontakt hattten.',
-                      ),
-                      OnboardingSection(
-                          title: "Dein Handy ist bei Dir",
-                          imagePath: 'assets/images/map.png',
-                          subtitle:
-                              'Diese App fragt deshalb periodisch deinen Standort ab.\nDeine Daten werden anonym erhoben und sind nur auf deinem Gerät verfügbar.'),
-                      OnboardingSection(
-                          title: "Du wirst gewarnt",
-                          imagePath: 'assets/images/virusWarning.png',
-                          subtitle:
-                              'Wenn einer deiner Kontakte infiziert wurde, kannst du frühzeitig einen Arzt aufsuchen und Risikogruppen in Deinem Umfeld schützen.'),
-                    ],
-                  ),
-                ),
+                _onboardingText(context),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: _buildPageIndicator(),
@@ -164,6 +135,39 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             )
           : Text(''),
+    );
+  }
+
+  Container _onboardingText(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.75,
+      child: PageView(
+        physics: ClampingScrollPhysics(),
+        controller: _pageController,
+        onPageChanged: (int page) {
+          setState(() {
+            _currentPage = page;
+          });
+        },
+        children: <Widget>[
+          OnboardingSection(
+            title: "Schütze Dich und Deine Nächsten",
+            imagePath: 'assets/images/family.png',
+            subtitle:
+                'In der heutigen Zeit ist es schwer nachzuvollziehen, mit wem wir in den letzten Wochen Kontakt hattten.',
+          ),
+          OnboardingSection(
+              title: "Dein Handy ist bei Dir",
+              imagePath: 'assets/images/map.png',
+              subtitle:
+                  'Diese App fragt deshalb periodisch deinen Standort ab.\nDeine Daten werden anonym erhoben und sind nur auf deinem Gerät verfügbar.'),
+          OnboardingSection(
+              title: "Du wirst gewarnt",
+              imagePath: 'assets/images/virusWarning.png',
+              subtitle:
+                  'Wenn einer deiner Kontakte infiziert wurde, kannst du frühzeitig einen Arzt aufsuchen und Risikogruppen in Deinem Umfeld schützen.'),
+        ],
+      ),
     );
   }
 

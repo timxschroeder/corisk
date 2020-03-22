@@ -1,5 +1,5 @@
-import 'package:corona_tracking/DAO.dart';
-import 'package:corona_tracking/LocalDAO.dart';
+import 'package:corona_tracking/database/DAO.dart';
+import 'package:corona_tracking/database/LocalDAO.dart';
 import 'package:corona_tracking/model/UISettings.dart';
 import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';

@@ -1,6 +1,6 @@
-import 'package:corona_tracking/DAO.dart';
-import 'package:corona_tracking/FirestoreDAO.dart';
-import 'package:corona_tracking/LocalDAO.dart';
+import 'package:corona_tracking/database/DAO.dart';
+import 'package:corona_tracking/database/FirestoreDAO.dart';
+import 'package:corona_tracking/database/LocalDAO.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
