@@ -42,8 +42,10 @@ void backgroundFetchHeadlessTask(String taskId) async {
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  FirebaseConfigurator();
+
+  FirebaseConfigurator().init();
   Notificator().init();
+
   runApp(App());
 
   // Register to receive BackgroundFetch events after app is terminated.
