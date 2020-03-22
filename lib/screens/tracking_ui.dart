@@ -1,11 +1,14 @@
 import 'package:corona_tracking/AnimatedButton.dart';
 import 'package:corona_tracking/ScrollablePopup.dart';
+import 'package:corona_tracking/model/CriticalMeeting.dart';
+import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
 import 'package:corona_tracking/utilities/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:redux/redux.dart';
@@ -36,11 +39,21 @@ class TrackingUI extends StatelessWidget {
               ),
               Center(child: RiskIndicator()),
               //Positioned(child: AnimatedButton(), top: 200.0),
+
               CustomPopup(
-                items: [
-                  "Mögliche Infektion 1, 23.20.20",
-                  "Mögliche Infektion 1, 23.20.20",
-                  "Mögliche Infektion 1, 23.20.20",
+                criticalMeetings: [
+                  CriticalMeeting(
+                      Location(
+                          Position(latitude: 53.892068, longitude: 10.637399, timestamp: DateTime.now())),
+                      100.0),
+                  CriticalMeeting(
+                      Location(
+                          Position(latitude: 53.892068, longitude: 10.637399, timestamp: DateTime.now())),
+                      100.0),
+                  CriticalMeeting(
+                      Location(
+                          Position(latitude: 53.892068, longitude: 10.637399, timestamp: DateTime.now())),
+                      100.0)
                 ],
                 builderFunction: (context, item) {
                   return ListTile(title: Text(item.toString()), onTap: () {});
