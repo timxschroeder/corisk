@@ -134,8 +134,8 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
   }
 
   Widget get _animatedButtonUI => Container(
-        height: 100,
-        width: 250,
+        height: 60,
+        width: 60 * 2.5,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(100),
           boxShadow: [

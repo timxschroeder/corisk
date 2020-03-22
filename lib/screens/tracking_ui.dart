@@ -61,11 +61,7 @@ class MeetingPopUp extends StatelessWidget {
       converter: (Store<AppState> store) => CriticalMeetingsViewModel.from(store),
       builder: (context, CriticalMeetingsViewModel viewModel) {
         return CustomPopup(
-          criticalMeetings: viewModel.meetings,
-          builderFunction: (context, item) {
-            return ListTile(title: Text(item.toString()), onTap: () {});
-          },
-        );
+          criticalMeetings: [CriticalMeeting(Location(Position(latitude: 53.553840, longitude: 9.991650, timestamp: DateTime.now())), 3.0)],);
       },
     );
   }
@@ -74,7 +70,7 @@ class MeetingPopUp extends StatelessWidget {
 class RiskIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double percent = 0.1;
+    double percent = 0.36;
     return StoreConnector<AppState, UISettingsViewModel>(
       converter: (Store<AppState> store) => UISettingsViewModel.from(store),
       builder: (context, UISettingsViewModel uiSettingsViewModel) {

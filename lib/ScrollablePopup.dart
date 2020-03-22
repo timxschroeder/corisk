@@ -10,11 +10,9 @@ import 'package:redux/redux.dart';
 class CustomPopup extends StatefulWidget {
   CustomPopup({
     @required this.criticalMeetings,
-    @required this.builderFunction,
   });
 
   final List<CriticalMeeting> criticalMeetings;
-  final Function(BuildContext context, dynamic item) builderFunction;
 
   @override
   _CustomPopupState createState() => _CustomPopupState();
