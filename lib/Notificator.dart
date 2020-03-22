@@ -10,14 +10,16 @@ class Notificator {
 
   void init() {
     final initIOS = IOSInitializationSettings(
-      requestAlertPermission: false,
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
     );
-    final initAndroid = AndroidInitializationSettings('@mipmpa/ic_launcher');
+    final initAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     final initPlugin = InitializationSettings(initAndroid, initIOS);
     _notifications.initialize(initPlugin);
   }
 
-  Future showNotification(String message) async {
+  Future showNotification(String title, String message) async {
     final androidSpecifics = AndroidNotificationDetails(
         'corona_tracker_channel',
         'Corona Tracking',
@@ -27,6 +29,6 @@ class Notificator {
     final iOSspecifics = IOSNotificationDetails();
     final platformSpecifics =
         NotificationDetails(androidSpecifics, iOSspecifics);
-     await _notifications.show(0, 'Kritische Gefahr', message, platformSpecifics);
+     await _notifications.show(0, title, message, platformSpecifics);
   }
 }
