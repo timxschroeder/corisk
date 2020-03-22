@@ -1,10 +1,5 @@
 import 'package:corona_tracking/AnimatedButton.dart';
-import 'package:corona_tracking/DAO.dart';
-import 'package:corona_tracking/FirestoreDAO.dart';
-import 'package:corona_tracking/LocationDAO.dart';
 import 'package:corona_tracking/ScrollablePopup.dart';
-import 'package:corona_tracking/model/Location.dart';
-import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
 import 'package:corona_tracking/utilities/styles.dart';
@@ -55,43 +50,7 @@ class TrackingUI extends StatelessWidget {
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: AnimatedButton()
-        /*FloatingActionButton(
-        backgroundColor: Colors.red,
-        onPressed: () => showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text("Infizierung melden"),
-                content: Text(
-                    "Möchtest du deine Infizierung melden, um Kontaktpersonen der letzten zwei Wochen zu warnen?"),
-                actions: <Widget>[
-                  // usually buttons at the bottom of the dialog
-                  FlatButton(
-                    child: Text("Abbrechen"),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  FlatButton(child: Text("Ja"), onPressed: () async => await _uploadLocationData()),
-                ],
-              );
-            }),
-        child: Icon(Icons.add),
-      ),*/
-        );
-  }
-
-  Future<void> _uploadLocationData() async {
-    final DAO locationDao = LocationDAO();
-    final FirestoreDAOImpl firebaseDao = FirestoreDAOImpl();
-    final List<Location> locations = [];
-
-    List<Map<String, dynamic>> jsons = await locationDao.listAll(Location.COLLECTION_NAME);
-
-    jsons.forEach((l) => locations.add(Location.fromJson(l)));
-
-    firebaseDao.insertObjectWithSubcollection(Patient(), locations);
+        floatingActionButton: AnimatedButton());
   }
 }
 
