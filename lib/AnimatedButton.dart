@@ -1,3 +1,8 @@
+import 'package:corona_tracking/DAO.dart';
+import 'package:corona_tracking/FirestoreDAO.dart';
+import 'package:corona_tracking/LocationDAO.dart';
+import 'package:corona_tracking/model/Location.dart';
+import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -43,6 +48,67 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
     _controller.reverse();
   }
 
+  void _onTap() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text("Infizierung melden"),
+            content: Text(
+                "Möchtest du deine Infizierung melden, um Kontaktpersonen der letzten zwei Wochen zu warnen?"),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              FlatButton(
+                child: Text("Abbrechen"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              FlatButton(
+                  child: Text("Ja"),
+                  onPressed: () async {
+                    await _uploadLocationData();
+                    _showConfirmation();
+                  }),
+            ],
+          );
+        });
+  }
+
+  void _showConfirmation() {
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+            title: Text("Hochladen abgeschlossen"),
+            content: Text(
+                "Vielen Dank für das Teilen deiner Infektion. Wir werden umgehend die Betroffenden informieren."),
+            actions: <Widget>[
+              // usually buttons at the bottom of the dialog
+              FlatButton(
+                child: Text("Ok"),
+                onPressed: () {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _uploadLocationData() async {
+    final DAO locationDao = LocationDAO();
+    final FirestoreDAOImpl firebaseDao = FirestoreDAOImpl();
+    final List<Location> locations = [];
+
+    List<Map<String, dynamic>> jsons = await locationDao.listAll(Location.COLLECTION_NAME);
+
+    jsons.forEach((l) => locations.add(Location.fromJson(l)));
+
+    firebaseDao.insertObjectWithSubcollection(Patient(), locations);
+  }
+
   @override
   Widget build(BuildContext context) {
     _scale = 1 - _controller.value;
@@ -51,7 +117,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
         converter: (Store<AppState> store) => UISettingsViewModel.from(store),
         builder: (context, UISettingsViewModel uiSettingsViewModel) {
           return GestureDetector(
-            onTap: () => uiSettingsViewModel.onClickInfectionLevelButton(),
+            onTap: _onTap,
             onTapDown: _onTapDown,
             onTapUp: _onTapUp,
             child: Transform.scale(
