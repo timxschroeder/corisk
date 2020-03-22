@@ -52,7 +52,7 @@ void main() {
 class App extends StatelessWidget {
   final Store<AppState> store = Store<AppState>(
     stateReducer,
-    initialState: AppState(UISettings(true, false)),
+    initialState: AppState(UISettings(false, false)),
     middleware: []..addAll(createUISettingsMiddleware()),
   );
 

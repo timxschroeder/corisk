@@ -82,8 +82,8 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xFFA7BFE8),
-              Color(0xFF6190E8),
+              Color(0xFFB53737),
+              Color(0xFF9E1A1A),
             ],
           ),
         ),
@@ -91,7 +91,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
             child: Padding(
           padding: EdgeInsets.symmetric(vertical: 5.0),
           child: Image(
-            image: AssetImage('assets/images/destination.png'),
+            image: AssetImage('assets/images/virus.png'),
             fit: BoxFit.scaleDown,
           ),
         )),
