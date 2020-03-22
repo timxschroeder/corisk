@@ -196,7 +196,7 @@ class OnboardingSection extends StatelessWidget {
           Expanded(
             child: Text(
               subtitle,
-              style: kSubtitleStyle.copyWith(backgroundColor: Colors.green),
+              style: kSubtitleStyle,
             ),
           ),
         ],

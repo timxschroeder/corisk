@@ -68,7 +68,7 @@ class TrackingUI extends StatelessWidget {
 class RiskIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double percent = 0.9;
+    double percent = 0.1;
     return CircularPercentIndicator(
       radius: 300.0,
       lineWidth: 45.0,
@@ -83,7 +83,7 @@ class RiskIndicator extends StatelessWidget {
         style: kTitleStyle,
       ),
       circularStrokeCap: CircularStrokeCap.round,
-      progressColor: HSVColor.lerp(HSVColor.fromColor(Colors.green), HSVColor.fromColor(Colors.red), percent).toColor(),
+      progressColor: HSVColor.lerp(HSVColor.fromColor(Color(0xffffd56a)), HSVColor.fromColor(Color(0xffe45314)), percent).toColor(),
       backgroundColor: Colors.white70,
     );
   }
