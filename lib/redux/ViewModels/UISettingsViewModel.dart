@@ -11,6 +11,7 @@ class UISettingsViewModel extends ViewModel {
   final Function(bool) onSetFirstVisit;
   final Function onClickInfectionLevelButton;
   final Function onDismissInfectionLevel;
+  final Function onSubmitInfectionData;
   final UISettings uiSettings;
 
   UISettingsViewModel({
@@ -18,6 +19,7 @@ class UISettingsViewModel extends ViewModel {
     @required this.onSetFirstVisit,
     @required this.onClickInfectionLevelButton,
     @required this.onDismissInfectionLevel,
+    @required this.onSubmitInfectionData,
     @required this.uiSettings,
   });
 
@@ -38,11 +40,16 @@ class UISettingsViewModel extends ViewModel {
       store.dispatch(DismissInfectionLevelAction());
     };
 
+    final Function onSubmitInfectionData = () {
+      store.dispatch(SubmitInfectionAction());
+    };
+
     return UISettingsViewModel(
       onInitializeUISettings: onInitializeUISettings,
       onSetFirstVisit: onSetFirstVisit,
       onClickInfectionLevelButton: onClickInfectionLevelButton,
       onDismissInfectionLevel: onDismissInfectionLevel,
+      onSubmitInfectionData: onSubmitInfectionData,
       uiSettings: uiSettingsSelector(store.state),
     );
   }

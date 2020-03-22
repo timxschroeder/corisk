@@ -12,12 +12,15 @@ class UISettings extends Serializable {
 
   bool infectionLevelButtonClicked;
 
-  UISettings(this.firstAppStart, this.infectionLevelButtonClicked);
+  bool infectionDataSubmitted;
+
+  UISettings(this.firstAppStart, this.infectionLevelButtonClicked, this.infectionDataSubmitted);
 
   UISettings.fromJson(Map<String, dynamic> json)
       : this.firstAppStart = json['firstAppStart'],
         this.infectionLevelButtonClicked =
             false, //should always be false on initialization due to UI functionality
+        this.infectionDataSubmitted = json['locationDataSubmitted'],
         super() {
     this.id = json['id'];
   }
@@ -26,16 +29,6 @@ class UISettings extends Serializable {
   Map<String, dynamic> toJson() => {
         'id': id,
         'firstAppStart': firstAppStart,
+        'locationDataSubmitted': infectionDataSubmitted,
       };
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is UISettings &&
-          runtimeType == other.runtimeType &&
-          firstAppStart == other.firstAppStart &&
-          infectionLevelButtonClicked == other.infectionLevelButtonClicked;
-
-  @override
-  int get hashCode => firstAppStart.hashCode ^ infectionLevelButtonClicked.hashCode;
 }

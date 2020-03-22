@@ -6,15 +6,18 @@ final uiSettingsReducer = combineReducers<UISettings>([
   TypedReducer<UISettings, SetUISettingFirstVisitActionSuccessful>(_updateUISetting),
   TypedReducer<UISettings, ClickInfectionLevelButtonAction>(_updateUISetting),
   TypedReducer<UISettings, DismissInfectionLevelAction>(_updateUISetting),
+  TypedReducer<UISettings, SubmitInfectionSuccessfulAction>(_updateUISetting),
 ]);
 
 UISettings _updateUISetting(UISettings uiSettings, UISettingsAction action) {
   if (action is SetUISettingFirstVisitActionSuccessful) {
-    uiSettings.firstAppStart = action.isFirstVisit;
+    uiSettings = action.uiSettings;
   } else if (action is ClickInfectionLevelButtonAction) {
     uiSettings.infectionLevelButtonClicked = true;
   } else if (action is DismissInfectionLevelAction) {
     uiSettings.infectionLevelButtonClicked = false;
+  } else if (action is SubmitInfectionSuccessfulAction) {
+    uiSettings.infectionDataSubmitted = true;
   }
 
   return uiSettings;

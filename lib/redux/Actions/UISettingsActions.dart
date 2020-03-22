@@ -1,3 +1,5 @@
+import 'package:corona_tracking/model/UISettings.dart';
+
 abstract class UISettingsAction {}
 
 class InitializeUISettingsAction extends UISettingsAction {
@@ -11,11 +13,15 @@ class SetUISettingFirstVisitAction extends UISettingsAction {
 }
 
 class SetUISettingFirstVisitActionSuccessful extends UISettingsAction {
-  final bool isFirstVisit;
+  final UISettings uiSettings;
 
-  SetUISettingFirstVisitActionSuccessful(this.isFirstVisit);
+  SetUISettingFirstVisitActionSuccessful(this.uiSettings);
 }
 
 class ClickInfectionLevelButtonAction extends UISettingsAction {}
 
 class DismissInfectionLevelAction extends UISettingsAction {}
+
+class SubmitInfectionAction extends UISettingsAction {}
+
+class SubmitInfectionSuccessfulAction extends UISettingsAction {}
