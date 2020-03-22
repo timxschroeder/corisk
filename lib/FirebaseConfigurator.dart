@@ -1,10 +1,11 @@
+import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/LocationDAO.dart';
 import 'package:corona_tracking/FirestoreDAO.dart';
 import 'package:corona_tracking/DAO.dart';
-import 'package:corona_tracking/RiskCalculator.dart';
+import 'package:corona_tracking/MeetingDetector.dart';
 
 class FirebaseConfigurator {
   final DAO _ldao = LocationDAO();
@@ -16,6 +17,9 @@ class FirebaseConfigurator {
   }
 
   Future<void> _onMessage(Map<String, dynamic> message) async {
+
+    // TODO Android und ios berücksichtigen
+    // TODO Berechtigungen für iOS Benachrichtigungen
     final String patientId =
         message['data']['patientId'] ?? message['patientId'];
 
@@ -28,11 +32,12 @@ class FirebaseConfigurator {
     final List<Location> patientLocations =
         (await _fdao.listAll(collection)).map((l) => Location.fromJson(l));
 
-    final RiskCalculator riskCalculator =
-        RiskCalculator(localLocations, patientLocations);
+    final MeetingDetector riskCalculator =
+        MeetingDetector(localLocations, patientLocations);
 
-    final List<Location> riskyPointz = riskCalculator.criticalPoints();
+    final List<CriticalMeeting> riskyPointz = riskCalculator.criticalPoints();
     if (riskyPointz.isNotEmpty) {
+      // TODO put into local store
       // TODO notify user here
     }
   }

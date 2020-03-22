@@ -1,5 +1,4 @@
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
-import 'package:corona_tracking/screens/tracking_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -37,7 +36,6 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
   }
 
   void _onTapDown(TapDownDetails details) {
-    InheritedDataProvider.of(context).buttonState.changeToTrue();
     _controller.forward();
   }
 

@@ -1,6 +1,5 @@
 import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
-import 'package:corona_tracking/screens/tracking_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -21,8 +20,6 @@ class CustomPopup extends StatefulWidget {
 class _CustomPopupState extends State<CustomPopup> {
   @override
   Widget build(BuildContext context) {
-    print("CustomPopupState" + InheritedDataProvider.of(context).buttonState.shouldShow.toString());
-
     return StoreConnector<AppState, UISettingsViewModel>(
         converter: (Store<AppState> store) => UISettingsViewModel.from(store),
         builder: (context, UISettingsViewModel uiSettingsViewModel) {

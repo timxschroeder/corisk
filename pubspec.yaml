@@ -32,6 +32,8 @@ dependencies:
   background_fetch: ^0.5.4
   flutter_emoji: ^2.2.1+1
   location_permissions: ^2.0.5
+  percent_indicator: ^2.1.1+1
+  intl: ^0.16.1
 
 
   # NoSQL dependencies
