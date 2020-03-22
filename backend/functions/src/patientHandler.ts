@@ -26,5 +26,5 @@ function sendPatientId(patientId: string): Promise<any> {
     const payload = {
         data: { patientId: patientId }
     }
-    return admin.messaging().sendToTopic("all", payload)
+    return admin.messaging().sendToTopic("infections", payload)
 }

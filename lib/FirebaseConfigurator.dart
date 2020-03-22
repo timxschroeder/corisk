@@ -1,6 +1,7 @@
 import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:corona_tracking/model/Location.dart';
+import 'package:corona_tracking/Notificator.dart';
 import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/LocationDAO.dart';
 import 'package:corona_tracking/FirestoreDAO.dart';
@@ -13,7 +14,7 @@ class FirebaseConfigurator {
   final DAO _fdao = FirestoreDAOImpl();
 
   FirebaseConfigurator() {
-    FirebaseMessaging().subscribeToTopic("infected");
+    FirebaseMessaging().subscribeToTopic("infections");
     FirebaseMessaging().configure(onMessage: this._onMessage);
   }
 
@@ -39,7 +40,8 @@ class FirebaseConfigurator {
     final List<CriticalMeeting> riskyPointz = riskCalculator.criticalPoints();
     if (riskyPointz.isNotEmpty) {
       // TODO put into local store
-      // TODO notify user here
+      final note = Notificator();
+      await note.showNotification('Gefahr erkannt', 'In ihrem Bewegungsprofil gibt es Überscheidungen mit Corona-Patienten');
     }
   }
 }
