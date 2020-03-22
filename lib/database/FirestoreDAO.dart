@@ -4,18 +4,12 @@ import 'package:corona_tracking/model/Serializable.dart';
 import 'package:flutter/foundation.dart';
 
 /// FirestoreDAO extends the generic DAO with Firestore Collection References.
-///
-/// @author schroeder
-/// @date 06.02.2019
 abstract class FirestoreDAO extends DAO {
   CollectionReference getCollectionReference(String collectionPath) =>
       Firestore.instance.collection(collectionPath);
 }
 
 /// Concrete Implementation of {FirestoreDAO}
-///
-/// @author schroeder
-/// @date 06.02.2019
 class FirestoreDAOImpl extends FirestoreDAO {
   static final FirestoreDAOImpl _instance = FirestoreDAOImpl._internal();
 

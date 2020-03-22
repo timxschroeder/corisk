@@ -3,7 +3,7 @@ import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/ViewModels/CriticalMeetingsViewModel.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
-import 'package:corona_tracking/utilities/styles.dart';
+import 'package:corona_tracking/utilities/Styles.dart';
 import 'package:corona_tracking/widgets/AnimatedButton.dart';
 import 'package:corona_tracking/widgets/ScrollablePopup.dart';
 import 'package:flutter/material.dart';

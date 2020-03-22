@@ -1,5 +1,5 @@
-import 'package:corona_tracking/screens/corona_tracker_screen.dart';
-import 'package:corona_tracking/utilities/styles.dart';
+import 'package:corona_tracking/screens/CoronaTrackerScreen.dart';
+import 'package:corona_tracking/utilities/Styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

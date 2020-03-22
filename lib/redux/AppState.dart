@@ -7,19 +7,17 @@ import 'package:corona_tracking/redux/Selectors/Selectors.dart';
 /// Global AppState, which holds all information relevant to building UI and Persistence.
 ///
 /// @see {lib/redux/documentation.md}
-///
-/// @author schroeder
-/// @date 12.12.2018
 class AppState {
   UISettings uiSettings;
 
   List<CriticalMeeting> criticalMeetings;
 
   AppState();
-  
+
   factory AppState.initialState() {
-    return AppState()..uiSettings = UISettings(true, false, false)
-                       ..criticalMeetings = [];
+    return AppState()
+      ..uiSettings = UISettings(true, false, false)
+      ..criticalMeetings = [];
   }
 }
 
@@ -29,4 +27,3 @@ AppState stateReducer(AppState state, action) {
 
   return state;
 }
-

@@ -4,9 +4,6 @@ import 'package:corona_tracking/model/Serializable.dart';
 import 'package:meta/meta.dart';
 
 /// Defines generic CRUD-Operations on type T.
-///
-/// @author schroeder
-/// @date 17.12.2018
 abstract class DAO {
   Future<void> insert({@required Serializable serializable, String collectionPath});
   void delete(Serializable serializable);

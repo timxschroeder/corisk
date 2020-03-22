@@ -1,7 +1,7 @@
 import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:corona_tracking/model/Location.dart';
-import 'package:corona_tracking/utilities/haversine.dart';
 import 'package:corona_tracking/model/Pair.dart';
+import 'package:corona_tracking/utilities/Haversine.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MeetingDetector {

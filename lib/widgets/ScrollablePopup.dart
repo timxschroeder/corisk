@@ -1,7 +1,7 @@
 import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
-import 'package:corona_tracking/utilities/styles.dart';
+import 'package:corona_tracking/utilities/Styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geocoder/geocoder.dart';

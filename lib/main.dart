@@ -12,7 +12,7 @@ import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/Middleware/criticalMeetingsMiddleware.dart';
 import 'package:corona_tracking/redux/Middleware/messageMiddleware.dart';
 import 'package:corona_tracking/redux/Middleware/uiSettingsMiddleware.dart';
-import 'package:corona_tracking/screens/onboarding_screen.dart';
+import 'package:corona_tracking/screens/OnboardingScreen.dart';
 import 'package:corona_tracking/utilities/MeetingDetector.dart';
 import 'package:corona_tracking/utilities/Notificator.dart';
 import 'package:flutter/material.dart';
