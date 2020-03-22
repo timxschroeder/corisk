@@ -12,3 +12,10 @@ final kSubtitleStyle = TextStyle(
   fontSize: 18.0,
   height: 1.2,
 );
+
+final kSmallTitleStyle = TextStyle(
+  color: Colors.black,
+  fontWeight: FontWeight.bold,
+  fontSize: 18.0,
+  height: 1.2,
+);

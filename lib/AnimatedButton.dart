@@ -53,6 +53,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
         context: context,
         builder: (_) {
           return AlertDialog(
+            backgroundColor: Color(0xFFD6E9F8),
             title: Text("Infizierung melden"),
             content: Text(
                 "Möchtest du deine Infizierung melden, um Kontaktpersonen der letzten zwei Wochen zu warnen?"),
@@ -80,6 +81,7 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
         context: context,
         builder: (_) {
           return AlertDialog(
+            backgroundColor: Color(0xFFD6E9F8),
             title: Text("Hochladen abgeschlossen"),
             content: Text(
                 "Vielen Dank für das Teilen deiner Infektion. Wir werden umgehend die Betroffenden informieren."),
