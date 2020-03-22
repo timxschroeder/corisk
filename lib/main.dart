@@ -69,40 +69,39 @@ void main() {
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 }
 
+Future<dynamic> onMessage(Map<String, dynamic> message) async {
+  final DAO _ldao = LocalDAO();
+  final DAO _fdao = FirestoreDAOImpl();
+  print('message received: $message');
+  final String patientId = message['data']['patientId'] ?? message['patientId'];
+
+  final List<Location> localLocations =
+      (await _ldao.listAll(Location.COLLECTION_NAME)).map((l) => Location.fromJson(l));
+
+  final String collection = "${Patient.COLLECTION_NAME}/$patientId/${Location.COLLECTION_NAME}";
+  final List<Location> patientLocations =
+      (await _fdao.listAll(collection)).map((l) => Location.fromJson(l));
+
+  final MeetingDetector riskCalculator = MeetingDetector(localLocations, patientLocations);
+
+  final List<CriticalMeeting> criticalPoints = riskCalculator.criticalPoints();
+  if (criticalPoints.isNotEmpty) {
+    final note = Notificator();
+    await note.showNotification(
+        'Gefahr erkannt', 'In ihrem Bewegungsprofil gibt es Überscheidungen mit Corona-Patienten');
+  }
+}
+
 class App extends StatelessWidget {
   final Store<AppState> store;
 
   App(this.store);
-
-  Future<dynamic> onMessage(Map<String, dynamic> message) async {
-    final DAO _ldao = LocalDAO();
-    final DAO _fdao = FirestoreDAOImpl();
-    print('message received: $message');
-    final String patientId = message['data']['patientId'] ?? message['patientId'];
-
-    final List<Location> localLocations =
-        (await _ldao.listAll(Location.COLLECTION_NAME)).map((l) => Location.fromJson(l));
-
-    final String collection = "${Patient.COLLECTION_NAME}/$patientId/${Location.COLLECTION_NAME}";
-    final List<Location> patientLocations =
-        (await _fdao.listAll(collection)).map((l) => Location.fromJson(l));
-
-    final MeetingDetector riskCalculator = MeetingDetector(localLocations, patientLocations);
-
-    final List<CriticalMeeting> criticalPoints = riskCalculator.criticalPoints();
-    if (criticalPoints.isNotEmpty) {
-      final note = Notificator();
-      await note.showNotification(
-          'Gefahr erkannt', 'In ihrem Bewegungsprofil gibt es Überscheidungen mit Corona-Patienten');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Notificator().init();
     //configurator.subscribe("infections");
     store.dispatch(InitializeUISettingsAction());
-    store.dispatch(ConfigureMessageHandlerAction(onMessage: this.onMessage));
+    store.dispatch(ConfigureMessageHandlerAction(onMessage: onMessage));
     store.dispatch(UpdateDeviceMessagingTokenAction());
 
     // TODO check if user has seen onboarding before
