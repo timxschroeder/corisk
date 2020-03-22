@@ -14,19 +14,19 @@ class TrackingUI extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  stops: [0.01, 0.82, 1],
-                  colors: [
-                    Color(0xFFe0dff1),
-                    Color(0xFF145791),
-                    Color(0xFF0652a4),
-                    // Color(0xe0dff1),
-                  ],
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    stops: [0.1, 0.4, 0.7, 0.9],
+                    colors: [
+                      Color(0xFF3594DD),
+                      Color(0xFF4563DB),
+                      Color(0xFF5036D5),
+                      Color(0xFF5B16D0),
+                    ],
+                  ),
                 ),
-              ),
             ),
             Center(child: RiskIndicator())
           ],
@@ -68,7 +68,7 @@ class TrackingUI extends StatelessWidget {
 class RiskIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    double percent = 0.995;
+    double percent = 0.9;
     return CircularPercentIndicator(
       radius: 300.0,
       lineWidth: 45.0,
@@ -76,7 +76,7 @@ class RiskIndicator extends StatelessWidget {
       percent: percent,
       center: Text(
         NumberFormat.percentPattern().format(percent),
-        style: kSubtitleStyle,
+        style: kTitleStyle,
       ),
       footer: Text(
         "Dein Infektionsrisiko",
@@ -84,6 +84,7 @@ class RiskIndicator extends StatelessWidget {
       ),
       circularStrokeCap: CircularStrokeCap.round,
       progressColor: HSVColor.lerp(HSVColor.fromColor(Colors.green), HSVColor.fromColor(Colors.red), percent).toColor(),
+      backgroundColor: Colors.white70,
     );
   }
 }
