@@ -52,7 +52,6 @@ void main() {
     middleware: []..addAll(createUISettingsMiddleware())..addAll(createCriticalMeetingsMiddleware()),
   );
 
-  FirebaseConfigurator(store);
   Notificator().init();
   runApp(App(store));
 

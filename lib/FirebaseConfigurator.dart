@@ -1,16 +1,16 @@
+import 'package:corona_tracking/LocalDAO.dart';
 import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/Notificator.dart';
 import 'package:corona_tracking/model/Patient.dart';
-import 'package:corona_tracking/LocationDAO.dart';
 import 'package:corona_tracking/FirestoreDAO.dart';
 import 'package:corona_tracking/DAO.dart';
 
 import 'package:corona_tracking/MeetingDetector.dart';
 
 Future<dynamic> onMessage(Map<String, dynamic> message) async {
-  final DAO _ldao = LocationDAO();
+  final DAO _ldao = LocalDAO();
   final DAO _fdao = FirestoreDAOImpl();
   print('message received: $message');
   final String patientId = message['data']['patientId'] ?? message['patientId'];
