@@ -6,8 +6,10 @@ abstract class MessageAction {}
 
 class ConfigureMessageHandlerAction extends MessageAction {
   final MessageHandler onMessage;
+  final String topic;
 
   ConfigureMessageHandlerAction({
+    @required this.topic,
     @required this.onMessage,
   });
 }

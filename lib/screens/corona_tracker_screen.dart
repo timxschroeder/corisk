@@ -94,15 +94,8 @@ class _CoronaRiskTrackerState extends State<CoronaRiskTracker> {
     BackgroundFetch.finish(taskId);
   }
 
-  Future<void> _calculateDanger(Map<String, dynamic> message) async {
-    return;
-  }
-
   @override
   Widget build(BuildContext context) {
-    FirebaseMessaging().subscribeToTopic("all");
-    FirebaseMessaging().configure(onMessage: _calculateDanger);
-
     return TrackingUI();
   }
 
