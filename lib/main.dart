@@ -104,7 +104,7 @@ class App extends StatelessWidget {
     Notificator().init();
     //configurator.subscribe("infections");
     store.dispatch(InitializeUISettingsAction());
-
+    store.dispatch(LoadCriticalMeetingsAction());
     store.dispatch(ConfigureMessageHandlerAction(topic: "infected", onMessage: onMessage));
     store.dispatch(UpdateDeviceMessagingTokenAction());
 

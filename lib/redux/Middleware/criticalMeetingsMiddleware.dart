@@ -15,7 +15,7 @@ List<Middleware<AppState>> createCriticalMeetingsMiddleware() {
 Middleware<AppState> _loadCriticalMeetings = (store, action, next) async {
   final DAO dao = LocalDAO();
   List<CriticalMeeting> meetings = await dao.listAll(CriticalMeeting.COLLECTION_NAME).then((jsons) {
-    return jsons.map((json) => CriticalMeeting.fromJson(json));
+    return jsons.map((json) => CriticalMeeting.fromJson(json)).toList();
   }).catchError((err) {
     print(err);
   });

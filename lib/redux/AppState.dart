@@ -18,8 +18,8 @@ class AppState {
   AppState();
   
   factory AppState.initialState() {
-    return AppState()..uiSettings = UISettings(true, false)
-    ..criticalMeetings = [];
+    return AppState()..uiSettings = UISettings(true, false, false)
+                       ..criticalMeetings = [];
   }
 }
 
