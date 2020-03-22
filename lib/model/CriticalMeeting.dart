@@ -1,5 +1,5 @@
-import 'package:corona_tracking/Serializable.dart';
 import 'package:corona_tracking/model/Location.dart';
+import 'package:corona_tracking/model/Serializable.dart';
 
 class CriticalMeeting extends Serializable {
   /// for DAO-Call
@@ -24,15 +24,13 @@ class CriticalMeeting extends Serializable {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is CriticalMeeting &&
-              runtimeType == other.runtimeType &&
-              location == other.location &&
-              distance == other.distance;
+      other is CriticalMeeting &&
+          runtimeType == other.runtimeType &&
+          location == other.location &&
+          distance == other.distance;
 
   @override
-  int get hashCode =>
-      location.hashCode ^
-      distance.hashCode;
+  int get hashCode => location.hashCode ^ distance.hashCode;
 
   CriticalMeeting.fromJson(Map<String, dynamic> json)
       : this.location = Location.fromJson(json['location']),
@@ -43,8 +41,8 @@ class CriticalMeeting extends Serializable {
 
   @override
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'distance': distance,
-    'location': location.toJson(),
-  };
+        'id': id,
+        'distance': distance,
+        'location': location.toJson(),
+      };
 }

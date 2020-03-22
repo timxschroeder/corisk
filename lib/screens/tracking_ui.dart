@@ -1,11 +1,11 @@
-import 'package:corona_tracking/AnimatedButton.dart';
-import 'package:corona_tracking/ScrollablePopup.dart';
 import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/ViewModels/CriticalMeetingsViewModel.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
 import 'package:corona_tracking/utilities/styles.dart';
+import 'package:corona_tracking/widgets/AnimatedButton.dart';
+import 'package:corona_tracking/widgets/ScrollablePopup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -61,7 +61,11 @@ class MeetingPopUp extends StatelessWidget {
       converter: (Store<AppState> store) => CriticalMeetingsViewModel.from(store),
       builder: (context, CriticalMeetingsViewModel viewModel) {
         return CustomPopup(
-          criticalMeetings: [CriticalMeeting(Location(Position(latitude: 53.553840, longitude: 9.991650, timestamp: DateTime.now())), 3.0)],);
+          criticalMeetings: [
+            CriticalMeeting(
+                Location(Position(latitude: 53.553840, longitude: 9.991650, timestamp: DateTime.now())), 3.0)
+          ],
+        );
       },
     );
   }

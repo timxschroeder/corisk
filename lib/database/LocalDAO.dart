@@ -1,7 +1,7 @@
-import 'package:corona_tracking/Serializable.dart';
 import 'package:corona_tracking/database/DAO.dart';
 import 'package:corona_tracking/database/LocalDatabase.dart';
 import 'package:corona_tracking/model/Location.dart';
+import 'package:corona_tracking/model/Serializable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 

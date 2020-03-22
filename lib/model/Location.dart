@@ -1,4 +1,4 @@
-import 'package:corona_tracking/Serializable.dart';
+import 'package:corona_tracking/model/Serializable.dart';
 import 'package:geolocator/geolocator.dart';
 
 class Location extends Serializable {

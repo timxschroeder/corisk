@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:corona_tracking/Serializable.dart';
 import 'package:corona_tracking/database/DAO.dart';
+import 'package:corona_tracking/model/Serializable.dart';
 import 'package:flutter/foundation.dart';
 
 /// FirestoreDAO extends the generic DAO with Firestore Collection References.

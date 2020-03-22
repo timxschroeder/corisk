@@ -1,4 +1,4 @@
-import 'package:corona_tracking/Serializable.dart';
+import 'package:corona_tracking/model/Serializable.dart';
 
 class Patient extends Serializable {
   /// for DAO-Call

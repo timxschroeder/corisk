@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import 'redux/AppState.dart';
+import '../redux/AppState.dart';
 
 class AnimatedButton extends StatefulWidget {
   @override

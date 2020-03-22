@@ -1,15 +1,11 @@
 import 'package:background_fetch/background_fetch.dart';
-import 'package:corona_tracking/MeetingDetector.dart';
-import 'package:corona_tracking/Notificator.dart';
 import 'package:corona_tracking/database/DAO.dart';
 import 'package:corona_tracking/database/FirestoreDAO.dart';
 import 'package:corona_tracking/database/LocalDAO.dart';
 import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/model/Patient.dart';
-import 'package:corona_tracking/model/UISettings.dart';
 import 'package:corona_tracking/redux/Actions/CriticalMeetingsActions.dart';
-import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/Actions/MessageActions.dart';
 import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';
@@ -17,6 +13,8 @@ import 'package:corona_tracking/redux/Middleware/criticalMeetingsMiddleware.dart
 import 'package:corona_tracking/redux/Middleware/messageMiddleware.dart';
 import 'package:corona_tracking/redux/Middleware/uiSettingsMiddleware.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
+import 'package:corona_tracking/utilities/MeetingDetector.dart';
+import 'package:corona_tracking/utilities/Notificator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -77,11 +75,10 @@ Future<dynamic> onMessage(Map<String, dynamic> message) async {
   final String patientId = message['data']['patientId'] ?? message['patientId'];
 
   final List<Location> localLocations =
-  (await _ldao.listAll(Location.COLLECTION_NAME)).map((l) => Location.fromJson(l)).toList();
+      (await _ldao.listAll(Location.COLLECTION_NAME)).map((l) => Location.fromJson(l)).toList();
 
   final String collection = "${Patient.COLLECTION_NAME}/$patientId/${Location.COLLECTION_NAME}";
-  final List<Location> patientLocations =
-      (await _fdao.listAll(collection)).map((l) => Location.fromJson(l));
+  final List<Location> patientLocations = (await _fdao.listAll(collection)).map((l) => Location.fromJson(l));
 
   final MeetingDetector riskCalculator = MeetingDetector(localLocations, patientLocations);
 

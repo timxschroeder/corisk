@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:corona_tracking/Serializable.dart';
+import 'package:corona_tracking/model/Serializable.dart';
 import 'package:meta/meta.dart';
 
 /// Defines generic CRUD-Operations on type T.
