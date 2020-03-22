@@ -1,7 +1,7 @@
 import 'package:corona_tracking/screens/corona_tracker_screen.dart';
+import 'package:corona_tracking/utilities/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:corona_tracking/utilities/styles.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -82,9 +82,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       });
                     },
                     children: <Widget>[
-                      OnboardingSection(title: "Schütze Dich und deine Nächsten", imagePath: 'assets/images/onboarding0.png', subtitle: 'In der heutigen Zeit ist es schwer nachzuvollziehen, mit wem wir in den letzten Wochen Kontakt hattten.',),
-                      OnboardingSection(title: "Dein Handy ist bei Dir", imagePath: 'assets/images/onboarding1.png', subtitle: 'Diese App fragt deshalb periodisch deinen Standort ab. \nDeine Daten werden anonym erhoben und sind nur auf deinem Gerät verfügbar.'),
-                      OnboardingSection(title: "Du wirst gewarnt", imagePath: 'assets/images/onboarding2.png', subtitle: 'Wenn einer deiner Kontakte infiziert wurde, kannst du frühzeitig einen Arzt aufsuchen und Risikogruppen in Deinem Umfeld schützen.'),
+                      OnboardingSection(
+                        title: "Schütze Dich und Deine Nächsten",
+                        imagePath: 'assets/images/family.png',
+                        subtitle:
+                            'In der heutigen Zeit ist es schwer nachzuvollziehen, mit wem wir in den letzten Wochen Kontakt hattten.',
+                      ),
+                      OnboardingSection(
+                          title: "Dein Handy ist bei Dir",
+                          imagePath: 'assets/images/map.png',
+                          subtitle:
+                              'Diese App fragt deshalb periodisch deinen Standort ab.\nDeine Daten werden anonym erhoben und sind nur auf deinem Gerät verfügbar.'),
+                      OnboardingSection(
+                          title: "Du wirst gewarnt",
+                          imagePath: 'assets/images/virusWarning.png',
+                          subtitle:
+                              'Wenn einer deiner Kontakte infiziert wurde, kannst du frühzeitig einen Arzt aufsuchen und Risikogruppen in Deinem Umfeld schützen.'),
                     ],
                   ),
                 ),
@@ -165,12 +178,8 @@ class OnboardingSection extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const OnboardingSection({
-    Key key,
-    @required this.imagePath,
-    @required this.title,
-    @required this.subtitle
-  }) : super(key: key);
+  const OnboardingSection({Key key, @required this.imagePath, @required this.title, @required this.subtitle})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -184,15 +193,15 @@ class OnboardingSection extends StatelessWidget {
               image: AssetImage(
                 imagePath,
               ),
-              height: MediaQuery.of(context).size.height*0.38,
+              height: MediaQuery.of(context).size.height * 0.38,
             ),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height*0.038),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.038),
           Text(
             title,
             style: kTitleStyle,
           ),
-          SizedBox(height: MediaQuery.of(context).size.height*0.019),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.019),
           Expanded(
             child: Text(
               subtitle,
@@ -204,6 +213,3 @@ class OnboardingSection extends StatelessWidget {
     );
   }
 }
-
-
-
