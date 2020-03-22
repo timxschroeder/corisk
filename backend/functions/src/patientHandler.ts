@@ -12,6 +12,9 @@ export const handleNewPatient =
 
             if (patient !== undefined) {
                 return sendPatientId(patient.id)
+                    .then((result) => {
+                        console.log("Successfully sent patient ID")
+                    })
                     .catch((err: Error) => {
                         console.log("Error occured");
                         console.log(err);
