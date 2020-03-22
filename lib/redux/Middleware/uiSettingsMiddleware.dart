@@ -1,5 +1,5 @@
 import 'package:corona_tracking/DAO.dart';
-import 'package:corona_tracking/LocationDAO.dart';
+import 'package:corona_tracking/LocalDAO.dart';
 import 'package:corona_tracking/model/UISettings.dart';
 import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';
@@ -14,7 +14,7 @@ List<Middleware<AppState>> createUISettingsMiddleware() {
 }
 
 Middleware<AppState> _initializeUISettings = (store, action, next) async {
-  final DAO dao = LocationDAO();
+  final DAO dao = LocalDAO();
 
   UISettings currentUISettings = uiSettingsSelector(store.state);
   List<Map<String, dynamic>> savedUISettings = await dao.listAll(UISettings.COLLECTION_NAME);
@@ -29,7 +29,7 @@ Middleware<AppState> _initializeUISettings = (store, action, next) async {
 };
 
 Middleware<AppState> _setFirstVisitUISetting = (store, action, next) async {
-  final DAO dao = LocationDAO();
+  final DAO dao = LocalDAO();
 
   UISettings currentUISettings = uiSettingsSelector(store.state);
 

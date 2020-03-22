@@ -3,6 +3,7 @@ import 'package:corona_tracking/FirebaseConfigurator.dart';
 import 'package:corona_tracking/model/UISettings.dart';
 import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';
+import 'package:corona_tracking/redux/Middleware/criticalMeetingsMiddleware.dart';
 import 'package:corona_tracking/redux/Middleware/uiSettingsMiddleware.dart';
 import 'package:corona_tracking/screens/onboarding_screen.dart';
 import 'package:corona_tracking/Notificator.dart';
@@ -44,9 +45,16 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   FirebaseConfigurator().init();
-  Notificator().init();
 
-  runApp(App());
+  final Store<AppState> store = Store<AppState>(
+    stateReducer,
+    initialState: AppState(UISettings(false, false)),
+    middleware: []..addAll(createUISettingsMiddleware())..addAll(createCriticalMeetingsMiddleware()),
+  );
+
+  FirebaseConfigurator(store);
+  Notificator().init();
+  runApp(App(store));
 
   // Register to receive BackgroundFetch events after app is terminated.
   // Requires {stopOnTerminate: false, enableHeadless: true}
@@ -54,11 +62,9 @@ void main() {
 }
 
 class App extends StatelessWidget {
-  final Store<AppState> store = Store<AppState>(
-    stateReducer,
-    initialState: AppState(UISettings(false, false)),
-    middleware: []..addAll(createUISettingsMiddleware()),
-  );
+  final Store<AppState> store;
+
+  App(this.store);
 
   @override
   Widget build(BuildContext context) {

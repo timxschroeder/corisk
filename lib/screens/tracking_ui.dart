@@ -59,30 +59,31 @@ class RiskIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     double percent = 0.1;
     return StoreConnector<AppState, UISettingsViewModel>(
-        converter: (Store<AppState> store) => UISettingsViewModel.from(store),
-        builder: (context, UISettingsViewModel uiSettingsViewModel) {
-          return InkWell(
-            onTap: () => uiSettingsViewModel.onClickInfectionLevelButton(),
-            child: CircularPercentIndicator(
-              radius: 300.0,
-              lineWidth: 45.0,
-              animation: true,
-              percent: percent,
-              center: Text(
-                NumberFormat.percentPattern().format(percent),
-                style: kTitleStyle,
-              ),
-              footer: Text(
-                "Dein Infektionsrisiko",
-                style: kTitleStyle,
-              ),
-              circularStrokeCap: CircularStrokeCap.round,
-              progressColor: HSVColor.lerp(
-                      HSVColor.fromColor(Color(0xffffd56a)), HSVColor.fromColor(Color(0xffe45314)), percent)
-                  .toColor(),
-              backgroundColor: Colors.white70,
+      converter: (Store<AppState> store) => UISettingsViewModel.from(store),
+      builder: (context, UISettingsViewModel uiSettingsViewModel) {
+        return InkWell(
+          onTap: () => uiSettingsViewModel.onClickInfectionLevelButton(),
+          child: CircularPercentIndicator(
+            radius: 300.0,
+            lineWidth: 45.0,
+            animation: true,
+            percent: percent,
+            center: Text(
+              NumberFormat.percentPattern().format(percent),
+              style: kTitleStyle,
             ),
-          );
-        });
+            footer: Text(
+              "Dein Infektionsrisiko",
+              style: kTitleStyle,
+            ),
+            circularStrokeCap: CircularStrokeCap.round,
+            progressColor: HSVColor.lerp(
+                    HSVColor.fromColor(Color(0xffffd56a)), HSVColor.fromColor(Color(0xffe45314)), percent)
+                .toColor(),
+            backgroundColor: Colors.white70,
+          ),
+        );
+      },
+    );
   }
 }

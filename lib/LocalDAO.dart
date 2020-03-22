@@ -5,7 +5,7 @@ import 'package:corona_tracking/model/Location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 
-class LocationDAO extends DAO {
+class LocalDAO extends DAO {
   Future<Database> get _db async => await LocalDatabase.instance.database;
 
   @override
@@ -13,7 +13,7 @@ class LocationDAO extends DAO {
     collectionPath ??= serializable.collectionName;
     final _locationsFolder = intMapStoreFactory.store(collectionPath);
     await _locationsFolder.add(await _db, serializable.toJson());
-    print('Location insert successful');
+    print('Insert successful');
   }
 
   @override
