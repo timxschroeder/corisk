@@ -1,5 +1,4 @@
 import 'package:background_fetch/background_fetch.dart';
-import 'package:corona_tracking/FirebaseConfigurator.dart';
 import 'package:corona_tracking/MeetingDetector.dart';
 import 'package:corona_tracking/Notificator.dart';
 import 'package:corona_tracking/database/DAO.dart';
@@ -9,8 +8,8 @@ import 'package:corona_tracking/model/CriticalMeeting.dart';
 import 'package:corona_tracking/model/Location.dart';
 import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/model/UISettings.dart';
-import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/Actions/MessageActions.dart';
+import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';
 import 'package:corona_tracking/redux/Middleware/criticalMeetingsMiddleware.dart';
 import 'package:corona_tracking/redux/Middleware/messageMiddleware.dart';
@@ -55,7 +54,7 @@ void main() {
 
   final Store<AppState> store = Store<AppState>(
     stateReducer,
-    initialState: AppState(UISettings(false, false)),
+    initialState: AppState(UISettings(true, false, false)),
     middleware: []
       ..addAll(createUISettingsMiddleware())
       ..addAll(createCriticalMeetingsMiddleware())

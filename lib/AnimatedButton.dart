@@ -1,8 +1,3 @@
-import 'package:corona_tracking/database/DAO.dart';
-import 'package:corona_tracking/database/FirestoreDAO.dart';
-import 'package:corona_tracking/database/LocalDAO.dart';
-import 'package:corona_tracking/model/Location.dart';
-import 'package:corona_tracking/model/Patient.dart';
 import 'package:corona_tracking/redux/ViewModels/UISettingsViewModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -48,67 +43,44 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
     _controller.reverse();
   }
 
-  void _onTap() {
+  void _showConfirmation(bool successful) {
     showDialog(
         context: context,
         builder: (_) {
-          return AlertDialog(
-            backgroundColor: Color(0xFFD6E9F8),
-            title: Text("Infizierung melden"),
-            content: Text(
-                "Möchtest du deine Infizierung melden, um Kontaktpersonen der letzten zwei Wochen zu warnen?"),
-            actions: <Widget>[
-              // usually buttons at the bottom of the dialog
-              FlatButton(
-                child: Text("Abbrechen"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              FlatButton(
-                  child: Text("Ja"),
-                  onPressed: () async {
-                    await _uploadLocationData();
-                    _showConfirmation();
-                  }),
-            ],
-          );
+          return successful
+              ? AlertDialog(
+                  backgroundColor: Color(0xFFD6E9F8),
+                  title: Text("Hochladen abgeschlossen"),
+                  content: Text(
+                      "Vielen Dank für das Teilen deiner Infektion. Wir werden umgehend die Betroffenden informieren."),
+                  actions: <Widget>[
+                    // usually buttons at the bottom of the dialog
+                    FlatButton(
+                      child: Text("Ok"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                )
+              : AlertDialog(
+                  backgroundColor: Color(0xFFD6E9F8),
+                  title: Text("Hochladen abgebrochen"),
+                  content: Text(
+                      "Du hast Dich bereits als infiziert gemeldet und Deine Daten übermittelt. Vielen Dank für deine Mithilfe."),
+                  actions: <Widget>[
+                    // usually buttons at the bottom of the dialog
+                    FlatButton(
+                      child: Text("Ok"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                );
         });
-  }
-
-  void _showConfirmation() {
-    showDialog(
-        context: context,
-        builder: (_) {
-          return AlertDialog(
-            backgroundColor: Color(0xFFD6E9F8),
-            title: Text("Hochladen abgeschlossen"),
-            content: Text(
-                "Vielen Dank für das Teilen deiner Infektion. Wir werden umgehend die Betroffenden informieren."),
-            actions: <Widget>[
-              // usually buttons at the bottom of the dialog
-              FlatButton(
-                child: Text("Ok"),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        });
-  }
-
-  Future<void> _uploadLocationData() async {
-    final DAO locationDao = LocalDAO();
-    final FirestoreDAOImpl firebaseDao = FirestoreDAOImpl();
-    final List<Location> locations = [];
-
-    List<Map<String, dynamic>> jsons = await locationDao.listAll(Location.COLLECTION_NAME);
-
-    jsons.forEach((l) => locations.add(Location.fromJson(l)));
-
-    firebaseDao.insertObjectWithSubcollection(Patient(), locations);
   }
 
   @override
@@ -119,7 +91,34 @@ class _AnimatedButtonState extends State<AnimatedButton> with SingleTickerProvid
         converter: (Store<AppState> store) => UISettingsViewModel.from(store),
         builder: (context, UISettingsViewModel uiSettingsViewModel) {
           return GestureDetector(
-            onTap: _onTap,
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      backgroundColor: Color(0xFFD6E9F8),
+                      title: Text("Infizierung melden"),
+                      content: Text(
+                          "Möchtest du deine Infizierung melden, um Kontaktpersonen der letzten zwei Wochen zu warnen?"),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("Abbrechen"),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        FlatButton(
+                            child: Text("Ja"),
+                            onPressed: () {
+                              if (!uiSettingsViewModel.uiSettings.infectionDataSubmitted) {
+                                uiSettingsViewModel.onSubmitInfectionData();
+                              }
+                              _showConfirmation(!uiSettingsViewModel.uiSettings.infectionDataSubmitted);
+                            }),
+                      ],
+                    );
+                  });
+            },
             onTapDown: _onTapDown,
             onTapUp: _onTapUp,
             child: Transform.scale(

@@ -1,11 +1,8 @@
 import 'package:corona_tracking/database/DAO.dart';
 import 'package:corona_tracking/database/LocalDAO.dart';
 import 'package:corona_tracking/model/CriticalMeeting.dart';
-import 'package:corona_tracking/model/UISettings.dart';
 import 'package:corona_tracking/redux/Actions/CriticalMeetingsActions.dart';
-import 'package:corona_tracking/redux/Actions/UISettingsActions.dart';
 import 'package:corona_tracking/redux/AppState.dart';
-import 'package:corona_tracking/redux/Selectors/Selectors.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createCriticalMeetingsMiddleware() {
@@ -14,21 +11,6 @@ List<Middleware<AppState>> createCriticalMeetingsMiddleware() {
     TypedMiddleware<AppState, AddCriticalMeetingsAction>(_addCriticalMeetings),
   ];
 }
-
-Middleware<AppState> _initializeUISettings = (store, action, next) async {
-  final DAO dao = LocalDAO();
-
-  UISettings currentUISettings = uiSettingsSelector(store.state);
-  List<Map<String, dynamic>> savedUISettings = await dao.listAll(UISettings.COLLECTION_NAME);
-
-  if (savedUISettings.isEmpty) {
-    await dao.insert(serializable: currentUISettings);
-  } else {
-    currentUISettings.firstAppStart = UISettings.fromJson(savedUISettings.first).firstAppStart;
-  }
-
-  store.dispatch(SetUISettingFirstVisitActionSuccessful(currentUISettings.firstAppStart));
-};
 
 Middleware<AppState> _loadCriticalMeetings = (store, action, next) async {
   final DAO dao = LocalDAO();
